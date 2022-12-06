@@ -23,8 +23,8 @@
 module shifter#(
     parameter shift=2
 )(
-  input [32-1:0] data_in,
-  output [32-1:0] data_out
+  input [32-1:0] i_data,
+  output [32-1:0] o_data
 );
-  assign out = data_in << shift;
+  assign o_data = i_data << shift;
 endmodule

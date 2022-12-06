@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 05.12.2022 15:37:39
+// Create Date: 06.12.2022 10:52:48
 // Design Name: 
-// Module Name: sumador
+// Module Name: mask_a_byte
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,11 +20,18 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module sumador#(
-    parameter TAM_DATO = 32
-)(
-    input [TAM_DATO-1:0] i_a, i_b,
-    output [TAM_DATO-1:0] o_result
-);
-    assign out_result = i_a + i_b;
+module mask_a_byte
+#(
+    parameter NUM_BYTES  = 4,
+    parameter TAM_MASK = $clog2(NUM_BYTES)
+ )
+ (
+    input   [TAM_MASK-1 : 0]      i_mascara,
+    output  [NUM_BYTES-1 : 0]     o_enables
+ );
+
+assign o_enables[3:2]   =   {i_mascara[1], i_mascara[1]};
+assign o_enables[1]     =   i_mascara[0];
+assign o_enables[0]     =   1'b1;
+
 endmodule
