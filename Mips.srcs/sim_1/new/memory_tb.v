@@ -44,6 +44,7 @@ module memory_tb;
     reg [ TAM_DIREC-1 : 0]  i_read_direc_B;
     
     wire [ NUM_BITS-1 : 0]  o_data;
+    wire [ NUM_BITS-1 : 0]  o_dato_enmascarado;
     wire [ NUM_BITS-1 : 0]  o_data_A;
     wire [ NUM_BITS-1 : 0]  o_data_B;
 
@@ -82,7 +83,11 @@ module memory_tb;
         i_mask,
         i_byte_enb
     );
-        
+    mascarilla mask(
+        i_mask,
+        o_data,
+        o_dato_enmascarado
+    );       
     
     initial begin
         i_clk = 0;
@@ -115,7 +120,13 @@ module memory_tb;
         #2
         i_write_enable = 1'b0;
         #2
-        
+        i_direcc = 5'd1;
+        i_mask = 2'b00;
+        #2
+        i_mask = 2'b01;
+        #2
+        i_mask = 2'b11;
+        #2         
         $finish;
     end
     
