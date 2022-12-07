@@ -44,6 +44,7 @@ module memory_tb;
     reg [ TAM_DIREC-1 : 0]  i_read_direc_B;
     
     wire [ NUM_BITS-1 : 0]  o_data;
+    wire [ NUM_BITS-1 : 0]  o_dato_signado;
     wire [ NUM_BITS-1 : 0]  o_dato_enmascarado;
     wire [ NUM_BITS-1 : 0]  o_data_A;
     wire [ NUM_BITS-1 : 0]  o_data_B;
@@ -88,6 +89,12 @@ module memory_tb;
         o_data,
         o_dato_enmascarado
     );       
+    signador signer(
+        1'b1,
+        i_mask,
+        o_dato_enmascarado,
+        o_dato_signado
+    );
     
     initial begin
         i_clk = 0;
@@ -100,7 +107,7 @@ module memory_tb;
         i_read_direc_B = 5'd3;
         i_direcc_debug = 5'd4;
         
-        i_data=32'hFFFFFFFF;
+        i_data=32'hFFFF0FFF;
         i_write_enable = 1'b1;
         #2
         i_direcc = 5'd1;
