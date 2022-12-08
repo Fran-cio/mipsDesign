@@ -46,8 +46,8 @@ module mod_control(
                     o_control_data = {9'b1x0000000,i_operation[0],8'bx11x1101};
                 12'b0?000?0?1???: 
                     o_control_data = {9'b1x0000000, i_function[0],8'bx00x1101};
-                default:
-                    o_control_data = {9'b100001110,i_function[5] | i_function[2],8'b1xxx1100};
+                default: // 001 Para que la Alu Control use el campo FUNC
+                    o_control_data = {9'b100000010,i_function[5] | i_function[2],8'b1xxx1100};
             endcase
         end
         else
