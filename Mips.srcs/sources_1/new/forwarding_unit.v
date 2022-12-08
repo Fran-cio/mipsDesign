@@ -5,7 +5,8 @@
 // 
 // Create Date: 06.12.2022 10:52:48
 // Design Name: 
-// Module Name: mask_a_byte NO TE OLVIDES DE PONER BIEN EL NOMBRE, COPYPASTERO <-----------------------------------------------
+// Module Name: forwarding_unit
+//<-----------------------------------------------
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -47,39 +48,4 @@ module forwarding_unit(
         : (i_reg_wr_mem_wb && (i_rd_mem_wb != 0) && (i_rd_mem_wb == i_rt_if_id))
         ? 2'b10 //Lo saca del WB
         : 2'b00; //Lo saca del registro
-
-/*
-    always @(*)  //Forward A
-    begin
-        if (i_reg_wr_id_ex 
-        && (i_rd_id_ex != 0)
-        && (i_rd_id_ex == i_rs_if_id)) 
-            forward_data_a = 2'b11; //Lo saca de la ALU (etapa de id/ex)
-        else if (i_reg_wr_ex_mem 
-        && (i_rd_ex_mem != 0)
-        && (i_rd_ex_mem == i_rs_if_id)) 
-            forward_data_a = 2'b01; //Lo saca de la salida de la ALU (etapa ex/mem)
-        else if (i_reg_wr_mem_wb 
-        && (i_rd_mem_wb != 0)
-        && (i_rd_mem_wb == i_rs_if_id))
-            forward_data_a = 2'b10; //Lo saca del WB
-    end
-*/
-/*
-    always @(*)  //Forward B
-    begin
-        if (i_reg_wr_id_ex
-        && (i_rd_ex_mem != 0)
-        && (i_rd_id_ex == i_rt_if_id))
-            forward_data_b = 2'b11; //Lo saca de la ALU (etapa id/ex)
-        else if (i_reg_wr_ex_mem
-        && (i_reg_wr_ex_mem != 0)
-        && (i_rd_ex_mem == i_rt_if_id))
-            forward_data_b = 2'b01; //Lo saca de la ALU /etapa ex/mem
-        else if (i_reg_wr_mem_wb
-        && (i_rd_mem_wb != 0)
-        && (i_rd_mem_wb == i_rt_if_id))
-            forward_data_b = 2'b10;
-    end
-*/
 endmodule
