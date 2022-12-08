@@ -28,7 +28,8 @@ module mod_control(
     );
 
     reg [18 - 1 : 0] o_control_data;
-
+//  17	    16	    15	      14	 13	     12   11	10	  9	      8	      7	      6	       5	    4	     3	       2	      1        0
+//RegDst MemToReg MemRead	Branch MemWrite	Ope2 Ope1 Ope0 ALUSrc RegWrite ShiftSrc JmpSrc JReturnDst EQorNE DataMask1 DataMask0 IsUnsigned JmpOrBrch
     always @(*)  
     begin
         if(~i_enable_control)
