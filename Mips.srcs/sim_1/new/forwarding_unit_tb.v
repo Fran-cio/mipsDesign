@@ -5,7 +5,7 @@
 // 
 // Create Date: 06.12.2022 11:05:47
 // Design Name: 
-// Module Name: memory_tb
+// Module Name: forwarding_unit_tb
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
