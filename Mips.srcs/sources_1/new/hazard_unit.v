@@ -28,6 +28,7 @@ module hazard_unit(
     input   [6-1 : 0]    i_rs_if_id,
     input   [6-1 : 0]    i_rt_if_id,
     input   [6-1 : 0]    i_rt_id_ex,
+    output               o_latch_en,
     output               o_is_risky
 );
 
@@ -37,5 +38,7 @@ assign  o_is_risky = i_mem_read_id_ex
                                     || i_rt_id_ex == i_rt_if_id) 
                                 ? 1'b1 
                                 : 1'b0;
+
+assign o_latch_en = ~o_is_risky;
 
 endmodule

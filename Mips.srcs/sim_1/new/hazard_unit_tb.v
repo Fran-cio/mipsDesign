@@ -28,6 +28,7 @@ module hazard_unit_tb;
     reg [6-1 : 0]   i_rt_if_id;
     reg [6-1 : 0]   i_rt_id_ex;
     //Output
+    wire            o_latch_en;
     wire            o_is_risky;
 
     hazard_unit hz_unit(
@@ -37,6 +38,7 @@ module hazard_unit_tb;
         .i_rs_if_id(i_rs_if_id),
         .i_rt_if_id(i_rt_if_id),
         .i_rt_id_ex(i_rt_id_ex),
+        .o_latch_en(o_latch_en),
         .o_is_risky(o_is_risky)
     );
 
