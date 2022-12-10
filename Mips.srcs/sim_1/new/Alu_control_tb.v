@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module Alu_control_tb;
+module alu_control_tb;
     wire [6 - 1 : 0]           i_function;
     wire [6 - 1 : 0]           i_operation;
     reg                       i_enable_control;

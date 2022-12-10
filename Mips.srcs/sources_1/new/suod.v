@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module soud#(
+module suod#(
      parameter NUM_LATCH = 4,     
                TAM_ORDEN = 8,  
                TAM_DATA  = 32,
@@ -36,16 +36,18 @@ module soud#(
     output  [NUM_LATCH-1 : 0]   o_enable_latch,
     // Lectura en registros
     input   [TAM_DATA-1:0]      i_debug_read_reg,
-    output  [TAM_DIREC_REG-1:0] i_debug_direcc_reg,
+    output  [TAM_DIREC_REG-1:0] o_debug_direcc_reg,
     // Lectura en memoria
     input   [TAM_DATA-1:0]      i_debug_read_mem,
-    output  [TAM_DIREC_REG-1:0] i_debug_direcc_mem,
+    output  [TAM_DIREC_REG-1:0] o_debug_direcc_mem,
     // interaccion con el pc
     input   [TAM_DATA-1:0]      i_read_pc,
     output                      o_pc_reset,
     // Escritura de la memoria de boot
     input                       i_is_halt,
     input                       i_fifo_empty,
+    output                      o_read_enable,
+    
     output                      o_bootload_write,
     output   [TAM_ORDEN-1:0]    o_bootload_byte
    );
@@ -79,13 +81,14 @@ module soud#(
    reg                      pc_reset_reg, pc_reset_next;
 
    reg                      bootload_write_reg, bootload_write_next;
-   reg   [TAM_ORDEN-1:0]    bootload_byte_reg, bootload_byte_next;
+   reg  [TAM_ORDEN-1:0]     bootload_byte_reg, bootload_byte_next;
+   reg                      read_enable_reg;
 
    // body
    // FSMD state & data registers
    always @(posedge i_clk)
       if (i_reset)
-         begin
+         begin        
             state_reg               <=  idle;
             enable_latch_reg        <=  0;
             enable_enviada_data_reg <=  0;
@@ -100,6 +103,7 @@ module soud#(
 
             bootload_write_reg      <=  0;
             bootload_byte_reg       <=  0;
+            read_enable_reg         <=  0;
          end
       else
          begin
@@ -133,8 +137,12 @@ module soud#(
         pc_reset_next           =   pc_reset_reg;
         
         bootload_write_next     =   bootload_write_reg;
-        bootload_byte_next      =   bootload_byte_reg;
+        bootload_byte_next      =   bootload_byte_reg;   
         
+        read_enable_reg         =   0;
+        
+            
+            
       case (state_reg)
          idle:
          begin
@@ -142,19 +150,23 @@ module soud#(
             enable_enviada_data_next    =   0;
             pc_reset_next               =   0;
             bootload_write_next         =   0;
-            case(i_orden)
-                "S":state_next = next;
-                "T":state_next = inc_point_reg;
-                "R":state_next = read_reg;
-                "E":state_next = dec_point_reg;
-                ",":state_next = inc_point_mem;
-                "M":state_next = read_mem;
-                "N":state_next = dec_point_mem;
-                "C":state_next = reset_pc;
-                "P":state_next = read_pc;
-                "B":state_next = bootloader;
-                "R":state_next = run;
-            endcase
+            if(~i_fifo_empty)
+            begin
+                case(i_orden)
+                    "S":state_next = next;
+                    "T":state_next = inc_point_reg;
+                    "R":state_next = read_reg;
+                    "E":state_next = dec_point_reg;
+                    ",":state_next = inc_point_mem;
+                    "M":state_next = read_mem;
+                    "N":state_next = dec_point_mem;
+                    "C":state_next = reset_pc;
+                    "P":state_next = read_pc;
+                    "B":state_next = bootloader;
+                    "G":state_next = run;
+                endcase
+                read_enable_reg   =   1;
+            end
          end
          next:
          begin
@@ -187,12 +199,12 @@ module soud#(
          inc_point_mem:
          begin
             debug_direcc_mem_next   =   debug_direcc_mem_reg + 1;
-            state_next              = idle; 
+            state_next              =   idle; 
          end
          dec_point_mem:
          begin
             debug_direcc_mem_next   =   debug_direcc_mem_reg - 1;
-            state_next              = idle; 
+            state_next              =   idle; 
          end
          reset_pc:
          begin
@@ -213,6 +225,7 @@ module soud#(
                 begin
                     bootload_byte_next  =   i_orden;
                     bootload_write_next =   1;
+                    read_enable_reg     =   1;
                 end
                 else
                     bootload_write_next =   0;
@@ -237,17 +250,18 @@ module soud#(
       endcase
    end
    // output
-    assign o_enable_enviada_data    =   enable_enviada_data_reg;
-    assign o_data_enviada           =   data_enviada_reg;
+    assign  o_read_enable           =   read_enable_reg;
+    assign  o_enable_enviada_data   =   enable_enviada_data_reg;
+    assign  o_data_enviada          =   data_enviada_reg;
     //Enable para los latch
-    assign enable_latch             =   enable_latch_reg;
+    assign  o_enable_latch          =   enable_latch_reg;
     // Lectura en registros
-    assign i_debug_direcc_reg       =   debug_direcc_reg_reg;
+    assign  o_debug_direcc_reg      =   debug_direcc_reg_reg;
     // Lectura en memoria
-    assign i_debug_direcc_mem       =   debug_direcc_mem_reg;
+    assign  o_debug_direcc_mem      =   debug_direcc_mem_reg;
     // interaccion con el pc
-    assign o_pc_reset               =   pc_reset_reg;
+    assign  o_pc_reset              =   pc_reset_reg;
     // Escritura de la memoria de boot
-    assign o_bootload_write         =   bootload_write_reg;
-    assign o_bootload_byte          =   bootload_byte_reg;
+    assign  o_bootload_write        =   bootload_write_reg;
+    assign  o_bootload_byte         =   bootload_byte_reg;
 endmodule
