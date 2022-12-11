@@ -5,7 +5,7 @@
 // 
 // Create Date: 04.12.2022 18:42:11
 // Design Name: 
-// Module Name: mux_tb
+// Module Name: mod_control_tb
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 

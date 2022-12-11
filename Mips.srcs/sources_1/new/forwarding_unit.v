@@ -22,11 +22,11 @@
 
 
 module forwarding_unit(
-    input   [6-1 : 0]       i_rs_if_id,
-    input   [6-1 : 0]       i_rt_if_id,
-    input   [6-1 : 0]       i_rd_id_ex,
-    input   [6-1 : 0]       i_rd_ex_mem,
-    input   [6-1 : 0]       i_rd_mem_wb,
+    input   [5-1 : 0]       i_rs_if_id,
+    input   [5-1 : 0]       i_rt_if_id,
+    input   [5-1 : 0]       i_rd_id_ex,
+    input   [5-1 : 0]       i_rd_ex_mem,
+    input   [5-1 : 0]       i_rd_mem_wb,
     input                   i_reg_wr_ex_mem,
     input                   i_reg_wr_id_ex,
     input                   i_reg_wr_mem_wb,

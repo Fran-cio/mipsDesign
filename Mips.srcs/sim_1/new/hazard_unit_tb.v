@@ -24,9 +24,9 @@ module hazard_unit_tb;
     reg             i_jmp_brch;
     reg             i_brch;
     reg             i_mem_read_id_ex;
-    reg [6-1 : 0]   i_rs_if_id;
-    reg [6-1 : 0]   i_rt_if_id;
-    reg [6-1 : 0]   i_rt_id_ex;
+    reg [5 - 1 : 0]   i_rs_if_id;
+    reg [5 - 1 : 0]   i_rt_if_id;
+    reg [5 - 1 : 0]   i_rt_id_ex;
     //Output
     wire            o_latch_en;
     wire            o_is_risky;
@@ -46,53 +46,53 @@ module hazard_unit_tb;
         i_jmp_brch = 1'b1;
         i_brch = 1'b0;
         i_mem_read_id_ex = 1'b1;
-        i_rs_if_id = 6'b000100;
-        i_rt_if_id = 6'b100000;
-        i_rt_id_ex = 6'b0000100;
+        i_rs_if_id = 5'b00100;
+        i_rt_if_id = 5'b10000;
+        i_rt_id_ex = 5'b000100;
 
         #50
 
         i_jmp_brch = 1'b0;
         i_brch = 1'b0;
         i_mem_read_id_ex = 1'b1;
-        i_rs_if_id = 6'b000100;
-        i_rt_if_id = 6'b100000;
-        i_rt_id_ex = 6'b0000100;
+        i_rs_if_id = 5'b00100;
+        i_rt_if_id = 5'b10000;
+        i_rt_id_ex = 5'b000100;
 
         #50
 
         i_jmp_brch = 1'b1;
         i_brch = 1'b1;
         i_mem_read_id_ex = 1'b1;
-        i_rs_if_id = 6'b000000;
-        i_rt_if_id = 6'b100100;
-        i_rt_id_ex = 6'b0000100;
+        i_rs_if_id = 5'b00000;
+        i_rt_if_id = 5'b10100;
+        i_rt_id_ex = 5'b000100;
 
         #50
 
         i_jmp_brch = 1'b1;
         i_brch = 1'b1;
         i_mem_read_id_ex = 1'b1;
-        i_rs_if_id = 6'b000000;
-        i_rt_if_id = 6'b100000;
-        i_rt_id_ex = 6'b0000100;
+        i_rs_if_id = 5'b00000;
+        i_rt_if_id = 5'b10000;
+        i_rt_id_ex = 5'b000100;
 
         #50
 
         i_jmp_brch = 1'b1;
         i_brch = 1'b1;
         i_mem_read_id_ex = 1'b1;
-        i_rs_if_id = 6'b000100;
-        i_rt_if_id = 6'b100000;
-        i_rt_id_ex = 6'b0000100;
+        i_rs_if_id = 5'b00100;
+        i_rt_if_id = 5'b10000;
+        i_rt_id_ex = 5'b000100;
         
         #50
         
         i_jmp_brch = 1'b1;
         i_brch = 1'b1;
         i_mem_read_id_ex = 1'b0;
-        i_rs_if_id = 6'b000100;
-        i_rt_if_id = 6'b100000;
-        i_rt_id_ex = 6'b0000100;
+        i_rs_if_id = 5'b00100;
+        i_rt_if_id = 5'b10000;
+        i_rt_id_ex = 5'b000100;
     end
 endmodule

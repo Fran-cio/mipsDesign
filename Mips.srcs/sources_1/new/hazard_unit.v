@@ -25,9 +25,9 @@ module hazard_unit(
     input                i_jmp_brch,
     input                i_brch,
     input                i_mem_read_id_ex,
-    input   [6-1 : 0]    i_rs_if_id,
-    input   [6-1 : 0]    i_rt_if_id,
-    input   [6-1 : 0]    i_rt_id_ex,
+    input   [5-1 : 0]    i_rs_if_id,
+    input   [5-1 : 0]    i_rt_if_id,
+    input   [5-1 : 0]    i_rt_id_ex,
     output               o_latch_en,
     output               o_is_risky
 );

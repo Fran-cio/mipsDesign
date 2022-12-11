@@ -22,11 +22,11 @@
 
 module forwarding_unit_tb;
     //Inputs
-    reg [6-1 : 0]   i_rs_if_id;
-    reg [6-1 : 0]   i_rt_if_id;
-    reg [6-1 : 0]   i_rd_id_ex;
-    reg [6-1 : 0]   i_rd_ex_mem;
-    reg [6-1 : 0]   i_rd_mem_wb;
+    reg [5 - 1 : 0]   i_rs_if_id;
+    reg [5 - 1 : 0]   i_rt_if_id;
+    reg [5 - 1 : 0]   i_rd_id_ex;
+    reg [5 - 1 : 0]   i_rd_ex_mem;
+    reg [5 - 1 : 0]   i_rd_mem_wb;
     reg             i_reg_wr_ex_mem;
     reg             i_reg_wr_id_ex;
     reg             i_reg_wr_mem_wb;
