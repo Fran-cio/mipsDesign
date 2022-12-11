@@ -76,7 +76,7 @@ module suod_tb;
             i_debug_direcc_reg,
     // Lectura en memoria
             32'hE4E3E2E1,
-            i_debug_direcc_mem,
+            i_debug_direcc_mem, //TODO: o_debug_direcc_mem?
     // interaccion con el pc
             32'hA4A3A2A1,
             o_pc_reset,
