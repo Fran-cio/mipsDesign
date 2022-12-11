@@ -21,21 +21,27 @@
 module pc_unit_tb;
     //Inputs
     reg                     i_clk;
+    reg                     i_reset;
     reg                     i_pc_reset;
+    reg                     i_stall;
     reg     [32 - 1 : 0]    i_new_pc;
     //Outputs
     wire    [32 - 1 : 0]    o_pc_value;
 
     pc_unit pc_unit1(
         i_clk,
+        i_reset,
         i_pc_reset,
+        i_stall,
         i_new_pc,
         o_pc_value
     );
 
     initial begin
         i_clk = 0;
+        i_reset = 0;
         i_pc_reset = 0;
+        i_stall = 0;
         i_new_pc = 32'hA4A3A2A1;
         #50
         i_pc_reset = 1;
@@ -43,9 +49,11 @@ module pc_unit_tb;
         i_pc_reset = 0;
         i_new_pc = 32'hFFFF0FFF;
         #50
-        i_pc_reset = 1;
+        i_stall = 1;
         #10
-        i_pc_reset = 0;
+        i_new_pc = 32'hFFFF0AAA;
+        #50
+        i_stall = 0;
     end
 
     always begin

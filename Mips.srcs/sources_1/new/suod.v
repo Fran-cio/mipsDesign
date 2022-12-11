@@ -21,7 +21,7 @@
 
 
 module suod#(
-     parameter NUM_LATCH = 4,     
+     parameter NUM_LATCH = 5,     
                TAM_ORDEN = 8,  
                TAM_DATA  = 32,
                TAM_DIREC_REG = 5

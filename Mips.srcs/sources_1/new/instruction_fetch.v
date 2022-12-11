@@ -5,7 +5,7 @@
 // 
 // Create Date: 05.12.2022 14:59:38
 // Design Name: 
-// Module Name: pc_unit
+// Module Name: instruction_fetch
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -19,28 +19,34 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-module pc_unit(
+module instruction_fetch(
     input                   i_clk,
     input                   i_reset,
     input                   i_pc_reset,
     input                   i_stall,
     input   [32 - 1 : 0]    i_new_pc,
-    output  [32 - 1 : 0]    o_pc_value
+    input                   i_word_is_ready,
+    input   [32 - 1 : 0]    i_word_sended, //la word que nos envía la suod a través del formador de palabras
+    output  [32 - 1 : 0]    o_instruction,
+    output                  o_is_end //cuando se termina de cargar la memoria de inst
 );
 
-reg [32 - 1 : 0] data_pc;
-reg [32 - 1 : 0] pc_value_reg;
+pc_unit pc_unit(
+    i_clk,
+    i_reset,
+    i_pc_reset,
+    i_stall,
+    i_new_pc,
+    o_pc_value
+);
 
-always @(posedge i_clk)
-begin
-    data_pc <= (i_pc_reset || i_reset) ? 0 : i_new_pc;
-end
-
-always @(negedge i_clk)
-begin
-    pc_value_reg <= i_stall ? pc_value_reg : data_pc;
-end
-
-assign o_pc_value = pc_value_reg;
-
+memoria_de_instruccion mem_inst(
+    i_clk,
+    i_reset,
+    i_word_is_ready,
+    i_word_sended,
+    o_pc_value, //La salida del PC entra a la mem
+    o_instruction,
+    o_is_end
+);
 endmodule
