@@ -34,31 +34,25 @@ module memory_access(
 
 mask_a_byte mask(
     i_data_mask,
-    o_data_masked
+    bits_de_mascara_a_memoria
 );
 
 memoria_por_byte memoria(
     i_clk,
     i_reset,
     i_wr_mem,
-    o_data_masked, //es una entrada, indicamos que bytes queremos
+    bits_de_mascara_a_memoria, //es una entrada, indicamos que bytes queremos
     i_direc_mem,
     i_data,
     i_debug_pointer,
     o_debug_read,
-    o_data_mem
-);
-
-mascarilla mascarita(
-    i_data_mask,
-    o_data_mem, //toma como entrada la salida del dato buscado en memoria
-    o_data_mask
+    dato_de_memoria_a_signador
 );
 
 signador signador(
     i_is_unsigned,
     i_data_mask,
-    o_data_mask, //toma como entrada la salida de la mascarita
+    dato_de_memoria_a_signador, //toma como entrada la salida de la mascarita
     o_data
 );
 endmodule

@@ -22,25 +22,26 @@
 
 module memoria_de_instruccion#(
     parameter NUM_BITS = 32,
-    parameter TAM_DIREC = 5,
-    parameter NUM_REGS  = 2**TAM_DIREC //Medio mucho para mi esta cantidad, pero bueno
+    parameter NUM_REGS  = 32*4, //Medio mucho para mi esta cantidad, pero bueno
+    parameter TAM_DIREC = $clog2(NUM_REGS)
  )
  (
     input  wire                      i_clk,
     input  wire                      i_reset,
     input  wire                      i_write_enable,
-    input  wire [ NUM_BITS-1 : 0]    i_data,
+    input  wire [BITS_EN_BYTE-1 : 0] i_data,
     input  wire [TAM_DIREC-1 : 0]    i_read_direc_intruccion,
 
     output wire [NUM_BITS-1 : 0]     o_intruccion,
     output                           is_end
  );
- 
-reg [NUM_BITS - 1 : 0] mem_instrucciones [NUM_REGS - 1 : 0];
+ localparam BITS_EN_BYTE = 8;
 
-reg [TAM_DIREC-1 : 0]  reg_write_ptr, next_write_ptr, succ_write_ptr; 
+reg [BITS_EN_BYTE - 1 : 0]  mem_instrucciones [NUM_REGS - 1 : 0];
 
-reg [NUM_BITS-1 : 0] reg_intruccion;
+reg [TAM_DIREC-1 : 0]       reg_write_ptr, next_write_ptr, succ_write_ptr; 
+
+reg [NUM_BITS-1 : 0]        reg_intruccion;
 integer i;
 
 // La escritura funciona como una fifo, los datos entran con un puntero interno
@@ -60,7 +61,10 @@ begin
 end
 // La lectura es con la direccion que se le ingrese
 always @ (negedge i_clk)
-    reg_intruccion <= mem_instrucciones[i_read_direc_intruccion];
+    reg_intruccion <= { mem_instrucciones[i_read_direc_intruccion+3],
+                        mem_instrucciones[i_read_direc_intruccion+2],
+                        mem_instrucciones[i_read_direc_intruccion+1],
+                        mem_instrucciones[i_read_direc_intruccion+0]};
 
 //Esta es la logica combinacional sacada de la fifo de la uart
 always @(*)

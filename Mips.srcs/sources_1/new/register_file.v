@@ -35,7 +35,8 @@ begin
         for (i = 0 ; i < NUM_REGS ; i = i + 1)
             registros[i] <= 0;    
     else if (i_write_enable)
-        registros[i_write_direc] <= i_data;
+        if(i_write_direc !=0)
+            registros[i_write_direc] <= i_data;
 end
 
 always @ (negedge i_clk)

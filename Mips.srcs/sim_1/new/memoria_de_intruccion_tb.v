@@ -21,8 +21,8 @@
 
 
 module memoria_de_intruccion_tb;
-    localparam NUM_BITS = 32;
-    localparam NUM_REGS  = 32;
+    localparam NUM_BITS = 8;
+    localparam NUM_REGS  = 32*4;
     localparam TAM_DIREC = $clog2(NUM_REGS);
     //Inputs
     reg i_clk;
@@ -33,8 +33,8 @@ module memoria_de_intruccion_tb;
     reg                     i_write_enable;
     reg [ TAM_DIREC-1 : 0]  i_read_direc_intruccion;
     
-    wire [ NUM_BITS-1 : 0]  o_intruccion;
-    wire                    is_end;
+    wire [ NUM_BITS*4-1 : 0] o_intruccion;
+    wire                     is_end;
     memoria_de_instruccion memoriaDeInstruccion(
         i_clk,
         i_reset,
@@ -52,22 +52,22 @@ module memoria_de_intruccion_tb;
         #2
         i_reset = 0;
         i_write_enable = 1;
-        i_read_direc_intruccion = 5'b0;
-        i_data = 32'h0F0F0F0F0F0F0F0F;
-        #10
+        i_read_direc_intruccion = 7'b0;
+        i_data = 8'h0F;
+        #40
         i_write_enable = 0;
-        i_read_direc_intruccion = 5'd1;
+        i_read_direc_intruccion = 7'b100;
         #2
-        i_read_direc_intruccion = 5'd2;
+        i_read_direc_intruccion = 7'b1000;
         #2
-        i_read_direc_intruccion = 5'd3;
+        i_read_direc_intruccion = 7'b1100;
         #2
-        i_read_direc_intruccion = 5'd4;
+        i_read_direc_intruccion = 7'b10000;
         #2
-        i_read_direc_intruccion = 5'd5;
-        i_reset = 1;
+        i_read_direc_intruccion = 7'b10100;
+        //i_reset = 1;
         #2
-        i_reset = 0;
+        //i_reset = 0;
         #2
         $finish;
     end

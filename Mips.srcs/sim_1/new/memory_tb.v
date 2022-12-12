@@ -22,7 +22,7 @@
 
 module memory_tb;
     localparam NUM_BITS = 32;
-    localparam NUM_REGS  = 32;
+    localparam NUM_REGS  = 32*4;
     localparam TAM_DIREC = $clog2(NUM_REGS);
     //Inputs
     reg i_clk;
@@ -45,7 +45,6 @@ module memory_tb;
     
     wire [ NUM_BITS-1 : 0]  o_data;
     wire [ NUM_BITS-1 : 0]  o_dato_signado;
-    wire [ NUM_BITS-1 : 0]  o_dato_enmascarado;
     wire [ NUM_BITS-1 : 0]  o_data_A;
     wire [ NUM_BITS-1 : 0]  o_data_B;
 
@@ -80,19 +79,16 @@ module memory_tb;
         o_data_A,
         o_data_B
     );
+    
     mask_a_byte transductor(
         i_mask,
         i_byte_enb
     );
-    mascarilla mask(
+
+    signador signer(
+        1'b0,
         i_mask,
         o_data,
-        o_dato_enmascarado
-    );       
-    signador signer(
-        1'b1,
-        i_mask,
-        o_dato_enmascarado,
         o_dato_signado
     );
     
@@ -101,33 +97,36 @@ module memory_tb;
         i_reset = 1;
         #2
         i_reset = 0;
+        #1
         i_mask = 2'b11;
-        i_direcc = 5'd1;
-        i_read_direc_A = 5'd1;
-        i_read_direc_B = 5'd3;
-        i_direcc_debug = 5'd4;
+        i_direcc = 7'd0;
+        i_read_direc_A = 7'b100;
+        i_read_direc_B = 7'b1000;
+        i_direcc_debug = 7'b1100;
         
         i_data=32'hFFFF0FFF;
         i_write_enable = 1'b1;
         #2
-        i_direcc = 5'd1;
+        i_direcc = 7'b100;
         #2
-        i_direcc = 5'd2;
+        i_direcc = 7'b1000;
         #2
-        i_direcc = 5'd3;
+        i_direcc = 7'b1100;
         #2
-        i_direcc = 5'd4;
+        i_direcc = 7'b10000;
         #2
-        i_direcc = 5'd5;
+        i_direcc = 7'b10100;
         i_mask = 2'b01;
         #2
-        i_direcc = 5'd4;
+        i_direcc = 7'b10000;
         i_mask = 2'b00;
         i_data=32'b1;
         #2
         i_write_enable = 1'b0;
+        i_mask = 2'b11;
         #2
-        i_direcc = 5'd1;
+        i_direcc = 7'b100;
+        #2
         i_mask = 2'b00;
         #2
         i_mask = 2'b01;

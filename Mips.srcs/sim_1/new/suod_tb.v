@@ -54,12 +54,11 @@ module suod_tb;
     
     wire    o_pc_reset,Tx_de_Pc_a_Suod, Tx_de_Soud_a_Pc,
             enable_de_sepador_a_uart, enable_de_suod_a_sepador,
-            is_halt_de_formador_a_suod, fifo_vacia_de_uart_a_suod,
-            enable_write_de_suod_a_formador, o_palabra_lista,
-            read_enable_de_suod_a_uart;
-    wire    [BUS_SIZE-1:0]  orden_de_uart_a_suod, byte_de_separador_a_uart, byte_de_suod_a_formador;
-    wire    [TAM_DATA-1:0]  palabra_de_suod_a_separador, o_palabra_enviada;
-    wire    [4-1:0]         o_enable_latch;
+            fifo_vacia_de_uart_a_suod,
+            enable_write_de_suod_a_bootloader, read_enable_de_suod_a_uart;
+    wire    [BUS_SIZE-1:0]  orden_de_uart_a_suod, byte_de_separador_a_uart, byte_de_suod_a_bootloader;
+    wire    [TAM_DATA-1:0]  palabra_de_suod_a_separador;
+    wire    [5-1:0]         o_enable_latch;
     wire     [5-1:0]        i_debug_direcc_reg,i_debug_direcc_mem;
     reg     i_is_end;
 
@@ -81,22 +80,11 @@ module suod_tb;
             32'hA4A3A2A1,
             o_pc_reset,
     // Escritura de la memoria de boot
-            is_halt_de_formador_a_suod,
             fifo_vacia_de_uart_a_suod,
             read_enable_de_suod_a_uart,
-            enable_write_de_suod_a_formador,
-            byte_de_suod_a_formador       
-        );
-        
-     formador_de_palabra formadorDePalabra(
-        i_clk, i_reset,
-        byte_de_suod_a_formador,
-        enable_write_de_suod_a_formador,
-    
-        o_palabra_enviada,
-        o_palabra_lista,
-        is_halt_de_formador_a_suod
-     );
+            enable_write_de_suod_a_bootloader,
+            byte_de_suod_a_bootloader       
+        );       
      
      separador_bytes separadorDeBytes(
         i_clk, i_reset,

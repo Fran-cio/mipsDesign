@@ -44,7 +44,6 @@ module suod#(
     input   [TAM_DATA-1:0]      i_read_pc,
     output                      o_pc_reset,
     // Escritura de la memoria de boot
-    input                       i_is_halt,
     input                       i_fifo_empty,
     output                      o_read_enable,
     
@@ -84,11 +83,14 @@ module suod#(
    reg  [TAM_ORDEN-1:0]     bootload_byte_reg, bootload_byte_next;
    reg                      read_enable_reg;
 
+   reg  [1:0]                instruccion_counter;
+
    // body
    // FSMD state & data registers
    always @(posedge i_clk)
       if (i_reset)
-         begin        
+         begin      
+            instruccion_counter     <=  0;
             state_reg               <=  idle;
             enable_latch_reg        <=  0;
             enable_enviada_data_reg <=  0;
@@ -219,22 +221,23 @@ module suod#(
          end
          bootloader:
          begin
-            if(~i_is_halt)
             begin
                 if(~i_fifo_empty)
                 begin
                     bootload_byte_next  =   i_orden;
                     bootload_write_next =   1;
                     read_enable_reg     =   1;
+                    instruccion_counter =   instruccion_counter + 1;                        
                 end
                 else
                     bootload_write_next =   0;
             end
-            else
-            begin
+            if(instruccion_counter ==   0)
+                if(i_orden[6]   ==  1)
+                begin
                     bootload_write_next =   0; 
                     state_next          =   idle;               
-            end       
+                end       
          end
          run:
          begin
