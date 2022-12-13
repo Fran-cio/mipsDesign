@@ -39,7 +39,7 @@ module execution(
     )
     mux_reg (
         i_reg_dst,
-        {i_rd_address, i_rt_address},
+        {i_rt_address,i_rd_address},
         o_reg_address
     );
 
@@ -49,7 +49,7 @@ module execution(
     )
     mux_alu (
         i_alu_src,
-        {i_rb_data, i_sign_extender_data},
+        {i_sign_extender_data, i_rb_data},
         o_mux_alu_data
     );
 
@@ -59,7 +59,7 @@ module execution(
     )
     mux_shift (
         i_shift_src,
-        {o_mux_alu_data, {27'b0, i_sign_extender_data[10 : 6]}},
+        {{27'b0, i_sign_extender_data[10 : 6]},o_mux_alu_data},
         o_shift_data
     );
 

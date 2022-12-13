@@ -39,14 +39,13 @@ module mux_tb;
     initial begin
         i_en = 0;
         #1
-        i_data[2:0] = 8'd1;
-        i_data[5:3] = 8'd2;
+        i_data[5:0] = {3'd2,3'd1};
         i_data[8:6] = 8'd3;
         i_data[11:9] = 8'd4;
         i_data[14:12] = 8'd5;
         i_data[17:15] = 8'd6;
         i_data[20:18] = 8'd7;
-        i_data[23:21] = 8'd8;
+        i_data[23:21] = 8'd2;
 
         #1
         i_en = 1;

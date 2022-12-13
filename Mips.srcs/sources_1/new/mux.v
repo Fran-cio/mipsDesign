@@ -29,7 +29,8 @@ module mux#(
         output  [BUS_SIZE - 1 : 0] o_data 
     );
         
-    assign o_data = i_data[(BUS_SIZE-1)+BUS_SIZE*i_en-:BUS_SIZE];      
-  
+    //assign o_data = i_data[(BUS_SIZE-1)+BUS_SIZE*i_en-:BUS_SIZE];      
+    assign o_data = i_data>>BUS_SIZE*i_en;      
+
 
 endmodule
