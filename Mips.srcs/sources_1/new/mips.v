@@ -24,7 +24,8 @@ module mips#(
         parameter   TAM_CAMPO_JUMP  =   26,
         parameter   TAM_CAMPO_OP    =   5,
         parameter   TAM_DIREC_REG   =   5,   
-        parameter   NUM_LATCHS      =   5       
+        parameter   NUM_LATCHS      =   5,
+        parameter   SIGNALS_SIZE    =   18       
     
     )(
         input                           i_clk,
@@ -65,7 +66,48 @@ localparam  IS_UNSIGNED     =    1;
 localparam  JMP_OR_BRCH     =    0;
 
 /*====================================== Instruction fetch ======================================*/
-
+wire    [TAM_DATA-1:0]          instruction;
+wire    [TAM_DATA-1:0]          pc_value;
+/*====================================== Latch IF/ID ======================================*/
+wire    [TAM_DATA * 2 - 1:0]    de_if_a_id; 
+/*====================================== MUXES IF/ID ======================================*/
+wire    [TAM_DATA-1:0]          new_pc;
+wire    [TAM_DATA-1:0]          o_mux_dir;
+wire    [TAM_DATA-1:0]          o_mux_pc_immediate;
+/*====================================== Sumador IMMEDIATE ======================================*/
+wire    [TAM_DATA-1:0]          immediate_suma_result;
+/*====================================== Sumador PC ======================================*/
+wire    [TAM_DATA-1:0]          pc_suma_result;
+/*====================================== Control Unit ======================================*/
+wire    [SIGNALS_SIZE-1:0]      o_signals;
+/*====================================== Instruction Decode ======================================*/
+wire    [TAM_DATA-1:0]          o_dato_ra_para_condicion;
+wire    [TAM_DATA-1:0]          o_dato_rb_para_condicion;
+wire    [TAM_DATA-1:0]          o_dato_direc_branch;
+wire    [TAM_DATA-1:0]          o_dato_direc_jump;
+wire    [TAM_DATA-1:0]          o_dato_ra;
+wire    [TAM_DATA-1:0]          o_dato_rb;
+wire    [TAM_DATA-1:0]          o_dato_inmediato;
+wire    [TAM_DIREC_REG-1:0]     o_direccion_rs;
+wire    [TAM_DIREC_REG-1:0]     o_direccion_rd;
+wire    [TAM_DIREC_REG-1:0]     o_direccion_rt;
+wire    [TAM_CAMPO_OP-1:0]      o_campo_op;
+/*====================================== Latch ID/EX ======================================*/
+wire    [120-1:0]               de_id_a_ex;
+/*====================================== Excecution ======================================*/
+wire    [TAM_DATA-1:0]          o_mem_data;
+wire    [TAM_DATA-1:0]          o_alu_data;
+wire    [TAM_DIREC_REG-1:0]     o_reg_address;
+/*====================================== Latch EX/MEM ======================================*/
+wire    [77-1:0]                de_ex_a_mem;
+/*====================================== Memory Access ======================================*/
+wire    [TAM_DATA-1:0]          o_data_salida_de_memoria;
+/*====================================== Latch MEM/WB ======================================*/
+wire    [72-1:0]                de_mem_a_wb;
+/*====================================== Write Back ======================================*/
+wire    [TAM_DATA-1:0]          dato_salido_wb;
+wire    [TAM_DIREC_REG-1:0]     direccion_de_wb;
+/*====================================== Instruction fetch ======================================*/
 instruction_fetch #(
     .TAM_DATA(TAM_DATA)
 )
@@ -83,7 +125,7 @@ IF(
 );
 assign o_read_debug_pc  =  pc_value; 
 /*====================================== Latch IF/ID ======================================*/
-wire   [TAM_DATA * 2 - 1:0] de_if_a_id; 
+
 latch #(
     .BUS_DATA(TAM_DATA * 2)
 )
@@ -95,17 +137,7 @@ if_id_latch(
     .o_data(de_if_a_id)
 );
 /*====================================== MUXES IF/ID ======================================*/
-wire    [18-1:0]  o_signals;
-mod_control#(
-    .FUN_SIZE(6),
-    .SIGNALS_SIZE(18)
-)
-control_unit(
-    .i_function(de_if_a_id[36 : 32]), 
-    .i_operation(o_campo_op), 
-    .i_enable_control(stall_ctl),
-    .o_control(o_signals)
-);
+
 
 mux #(
     .BITS_ENABLES(1),
@@ -132,15 +164,15 @@ mux #(
     .BUS_SIZE(TAM_DATA)
 )
 mux_pc_immediate(
-    .i_en(o_signals[JMP_SRC]),
+    .i_en(enable_mux_pc_immediate),
     .i_data({immediate_suma_result, pc_suma_result}),
     .o_data(o_mux_pc_immediate)
 );
-assign o_mux_pc_immediate = o_mux_eq_neq && o_signals[BRANCH];
+assign enable_mux_pc_immediate = o_mux_eq_neq && o_signals[BRANCH];
 
 mux #(
     .BITS_ENABLES(1),
-    .BUS_SIZE(TAM_DATA)
+    .BUS_SIZE(1)
 )
 mux_eq_neq(
     .i_en(o_signals[EQ_OR_NEQ]),
@@ -151,7 +183,6 @@ mux_eq_neq(
 assign i_eq_neq = o_dato_ra_para_condicion ^ o_dato_rb_para_condicion;
 
 /*====================================== Sumador IMMEDIATE ======================================*/
-
 sumador #(
     .TAM_DATO(TAM_DATA)
 )
@@ -178,7 +209,6 @@ hazard_unit(
 );
 
 /*====================================== Sumador PC ======================================*/
-
 sumador #(
     .TAM_DATO(TAM_DATA)
 )
@@ -189,10 +219,17 @@ sum_ip_mas_cuatro(
 );
 
 /*====================================== Control Unit ======================================*/
-
-
+mod_control#(
+    .FUN_SIZE(6),
+    .SIGNALS_SIZE(18)
+)
+control_unit(
+    .i_function(de_if_a_id[36 : 32]), 
+    .i_operation(o_campo_op), 
+    .i_enable_control(stall_ctl),
+    .o_control(o_signals)
+);
 /*====================================== Instruction Decode ======================================*/
-
 instruction_decode ID(
     .i_clk(i_clk),
     .i_reset(i_reset),
@@ -237,7 +274,6 @@ instruction_decode ID(
 );
 
 /*====================================== Latch ID/EX ======================================*/
-wire    [120-1:0] de_id_a_ex;
 latch #(
     .BUS_DATA(118)
 )
@@ -254,7 +290,6 @@ id_ex_latch(
 );
 
 /*====================================== Excecution ======================================*/
-
 execution EX(
     .i_shift_src(de_id_a_ex[8]),
     .i_reg_dst(de_id_a_ex[13]),
@@ -271,7 +306,6 @@ execution EX(
 );
 
 /*====================================== Latch EX/MEM ======================================*/
-wire    [77-1:0]  de_ex_a_mem;
 latch #(
     .BUS_DATA(77)
 )
@@ -284,7 +318,6 @@ ex_mem_latch(
 );
 
 /*====================================== Memory Access ======================================*/
-
 memory_access MEM(
     .i_clk(i_clk),
     .i_reset(i_reset),
@@ -299,7 +332,6 @@ memory_access MEM(
 );
 
 /*====================================== Latch MEM/WB ======================================*/
-wire    [72-1:0]  de_mem_a_wb;
 latch #(
     .BUS_DATA(72)
 )
@@ -310,6 +342,7 @@ mem_wb_latch(
     {de_ex_a_mem[38:7], de_ex_a_mem[76:71], o_data_salida_de_memoria, de_ex_a_mem[2:0]}, 
     de_mem_a_wb
 );
+/*====================================== Write Back ======================================*/
 write_back WB(
     .i_dato_de_mem(de_mem_a_wb[34:3]),
     .i_dato_de_reg(de_mem_a_wb[71:40]),
