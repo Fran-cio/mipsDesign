@@ -26,16 +26,16 @@ module memoria_de_instruccion#(
     parameter TAM_DIREC = $clog2(NUM_REGS)
  )
  (
-    input  wire                      i_clk,
-    input  wire                      i_reset,
-    input  wire                      i_write_enable,
-    input  wire [BITS_EN_BYTE-1 : 0] i_data,
-    input  wire [TAM_DIREC-1 : 0]    i_read_direc_intruccion,
+    input  wire                     i_clk,
+    input  wire                     i_reset,
+    input  wire                     i_write_enable,
+    input  wire [8-1 : 0]           i_data,
+    input  wire [TAM_DIREC-1 : 0]   i_read_direc_intruccion,
 
-    output wire [NUM_BITS-1 : 0]     o_intruccion,
-    output                           is_end
+    output wire [NUM_BITS-1 : 0]    o_intruccion,
+    output                          is_end
  );
- localparam BITS_EN_BYTE = 8;
+localparam BITS_EN_BYTE = 8;
 
 reg [BITS_EN_BYTE - 1 : 0]  mem_instrucciones [NUM_REGS - 1 : 0];
 

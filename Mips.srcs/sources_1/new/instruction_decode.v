@@ -130,7 +130,7 @@ module instruction_decode#(
     );
     
     assign  o_campo_op                  =   i_instruccion[31:26];
-    assign  o_dato_direc_branch         =   salida_de_forwarding_dato_a;  
+    assign  o_dato_direc_branch         =   o_dato_inmediato;  
     assign  o_dato_direc_jump           =   i_instruccion[25:0];
     assign  o_dato_ra_para_condicion    =   salida_de_forwarding_dato_a;  
     assign  o_dato_rb_para_condicion    =   o_dato_rb;

@@ -32,22 +32,19 @@ module mips#(
         input                           i_bootload_wr_en,
         input                           i_pc_reset,
         input   [NUM_LATCHS - 1 :  0]   i_latches_en,
-        input   [BITS_EN_BYTE - 1 : 0]  i_bootload_byte,
+        input   [8 - 1 : 0]  i_bootload_byte,
         input   [TAM_DATA - 1 : 0]      i_debug_ptr_mem,
         input   [TAM_DATA - 1 : 0]      i_debug_ptr_reg,
         
         output                          o_is_end,
-        output                          o_is_halt,
         output  [TAM_DATA - 1 : 0]      o_debug_read_reg,
         output  [TAM_DATA - 1 : 0]      o_debug_read_mem,
         output  [TAM_DATA - 1 : 0]      o_read_debug_pc
 );
+localparam BITS_EN_BYTE = 8;
 
 //  17	    16	    15	      14	 13	     12   11	10	  9	      8	      7	      6	       5	    4	     3	       2	      1        0
 //RegDst MemToReg MemRead	Branch MemWrite	Ope2 Ope1 Ope0 ALUSrc RegWrite ShiftSrc JmpSrc JReturnDst EQorNE DataMask1 DataMask0 IsUnsigned JmpOrBrch
- 
-localparam  BITS_EN_BYTE = 8;
-
 localparam  REG_DST         =   17;
 localparam  MEM_TO_REG      =   16;
 localparam  MEM_READ        =   15;
@@ -81,12 +78,12 @@ IF(
     .i_bootloader_write_enable(i_bootload_wr_en),
     .i_byte_de_bootloader(i_bootload_byte),
     .o_instruction(instruction),
-    .o_is_end(o_is_halt),
+    .o_is_end(o_is_end),
     .o_pc_value(pc_value)
 );
-
+assign o_read_debug_pc  =  pc_value; 
 /*====================================== Latch IF/ID ======================================*/
-
+wire   [TAM_DATA * 2 - 1:0] de_if_a_id; 
 latch #(
     .BUS_DATA(TAM_DATA * 2)
 )
@@ -97,12 +94,22 @@ if_id_latch(
     .i_data({instruction, pc_value}), 
     .o_data(de_if_a_id)
 );
-
 /*====================================== MUXES IF/ID ======================================*/
+wire    [18-1:0]  o_signals;
+mod_control#(
+    .FUN_SIZE(6),
+    .SIGNALS_SIZE(18)
+)
+control_unit(
+    .i_function(de_if_a_id[36 : 32]), 
+    .i_operation(o_campo_op), 
+    .i_enable_control(stall_ctl),
+    .o_control(o_signals)
+);
 
 mux #(
     .BITS_ENABLES(1),
-    .BUS_SIZE(TAM_DATA * 2)
+    .BUS_SIZE(TAM_DATA)
 )
 mux_jmp_brch(
     .i_en(o_signals[JMP_OR_BRCH]),
@@ -112,17 +119,17 @@ mux_jmp_brch(
 
 mux #(
     .BITS_ENABLES(1),
-    .BUS_SIZE(TAM_DATA * 2)
+    .BUS_SIZE(TAM_DATA)
 )
 mux_dir(
     .i_en(o_signals[JMP_SRC]),
-    .i_data({de_if_a_id[57 : 32] << 2, o_dato_ra_para_condicion}), //TODO: creo que esto se puede tomar de ID pero no sabía cual era
+    .i_data({o_dato_direc_jump << 2, o_dato_ra_para_condicion}), 
     .o_data(o_mux_dir)
 );
 
 mux #(
     .BITS_ENABLES(1),
-    .BUS_SIZE(TAM_DATA * 2)
+    .BUS_SIZE(TAM_DATA)
 )
 mux_pc_immediate(
     .i_en(o_signals[JMP_SRC]),
@@ -133,7 +140,7 @@ assign o_mux_pc_immediate = o_mux_eq_neq && o_signals[BRANCH];
 
 mux #(
     .BITS_ENABLES(1),
-    .BUS_SIZE(TAM_DATA * 2)
+    .BUS_SIZE(TAM_DATA)
 )
 mux_eq_neq(
     .i_en(o_signals[EQ_OR_NEQ]),
@@ -149,9 +156,9 @@ sumador #(
     .TAM_DATO(TAM_DATA)
 )
 sum_if(
-    .i_a(pc_value), //TODO: en el diagrama hay un shift 2, hay que hacerlo? son 32 bits...
-    .i_b(de_if_a_id[48 : 32]), //TODO: se puede hacer mejor?
-    .out_result(immediate_suma_result)
+    .i_a(pc_value), 
+    .i_b(o_dato_direc_branch<<2), 
+    .o_result(immediate_suma_result)
 );
 
 /*====================================== Hazard Unit ======================================*/
@@ -165,7 +172,7 @@ hazard_unit(
     .i_mem_read_id_ex(de_id_a_ex[4]),
     .i_rs_if_id(o_direccion_rs),
     .i_rt_if_id(o_direccion_rt),
-    .i_rt_id_ex(de_id_a_ex[117 : 113]), //TODO: controlar que esto esté bien
+    .i_rt_id_ex(de_id_a_ex[119 : 115]), 
     .o_latch_en(stall_latch),
     .o_is_risky(stall_ctl)
 );
@@ -175,80 +182,74 @@ hazard_unit(
 sumador #(
     .TAM_DATO(TAM_DATA)
 )
-sum_if(
+sum_ip_mas_cuatro(
     .i_a(pc_value),
     .i_b(4),
-    .out_result(pc_suma_result)
+    .o_result(pc_suma_result)
 );
 
 /*====================================== Control Unit ======================================*/
 
-mod_control control_unit #(
-    .FUN_SIZE(6),
-    .SIGNALS_SIZE(18)
-)
-(
-    .i_function(de_if_a_id[63 : 58]), //controlar
-    .i_operation(o_campo_op), //TODO: está bien eso o flasheo???
-    .i_enable_control(stall_ctl),
-    .o_control(o_signals)
-)
 
 /*====================================== Instruction Decode ======================================*/
 
 instruction_decode ID(
-    i_clk,
-    i_reset,
+    .i_clk(i_clk),
+    .i_reset(i_reset),
     //Intruccion
-    .i_sign_extender_data(de_if_a_id[63:32]),
+    .i_instruccion(de_if_a_id[63:32]),
     // Cortocircuito
-    i_reg_write_id_ex,
-    i_reg_write_ex_mem,
-    i_reg_write_mem_wb,
-    i_direc_rd_id_ex, 
-    i_direc_rd_ex_mem,     
-    i_direc_rd_mem_wb,     
-    i_dato_de_id_ex, 
-    i_dato_de_ex_mem, 
-    i_dato_de_mem_wb, 
+    .i_reg_write_id_ex(de_id_a_ex[3]),
+    .i_reg_write_ex_mem(de_ex_a_mem[3]),
+    .i_reg_write_mem_wb(de_mem_a_wb[3]),
+    .i_direc_rd_id_ex(o_reg_address), 
+    .i_direc_rd_ex_mem(de_id_a_ex[5:0]),     
+    .i_direc_rd_mem_wb(direccion_de_wb),     
+    .i_dato_de_id_ex(o_alu_data), 
+    .i_dato_de_ex_mem(o_data_salida_de_memoria), 
+    .i_dato_de_mem_wb(dato_salido_wb), 
     //Al registro
-    i_dato_de_escritura_en_reg,
-    i_direc_de_escritura_en_reg,
+    .i_dato_de_escritura_en_reg(dato_salido_wb),
+    .i_direc_de_escritura_en_reg(direccion_de_wb),
     // Para Debug
     .o_dato_a_debug(o_debug_read_reg),
     .i_direc_de_lectura_de_debug(i_debug_ptr_reg),
     // Para comparar salto
-    o_dato_ra_para_condicion,
-    o_dato_rb_para_condicion,
+    .o_dato_ra_para_condicion(o_dato_ra_para_condicion),
+    .o_dato_rb_para_condicion(o_dato_rb_para_condicion),
     //Para Branch
-    o_dato_direc_branch,
+    .o_dato_direc_branch(o_dato_direc_branch),
     //Para Jump
-    o_dato_direc_jump,
+    .o_dato_direc_jump(o_dato_direc_jump),
     // Para direccion de retorno
-    i_dato_nuevo_pc,
+    .i_dato_nuevo_pc(de_if_a_id[31:0]),
     //Datos
-    o_dato_ra,
-    o_dato_rb,
-    o_dato_inmediato,
-    o_direccion_rs,
-    o_direccion_rt,
-    o_direccion_rd,
+    .o_dato_ra(o_dato_ra),
+    .o_dato_rb(o_dato_rb),
+    .o_dato_inmediato(o_dato_inmediato),
+    .o_direccion_rs(o_direccion_rs),
+    .o_direccion_rt(o_direccion_rt),
+    .o_direccion_rd(o_direccion_rd),
     // A control
-    o_campo_op,
+    .o_campo_op(o_campo_op),
     // Flags de control
-    o_signals[JMP_OR_BRCH] //TODO: Controlar
+    .i_jump_o_branch(o_signals[JMP_OR_BRCH]) //TODO: Controlar
 );
 
 /*====================================== Latch ID/EX ======================================*/
-
+wire    [120-1:0] de_id_a_ex;
 latch #(
-    .BUS_DATA(118),
+    .BUS_DATA(118)
 )
 id_ex_latch(
     i_clk,
     i_reset,
-    i_latches_en[2] || ,//enable de la hazard unit
-    ,//instrucción concatenada con la salida de la program counter 
+    i_latches_en[2],
+    {   o_direccion_rd, o_direccion_rd,o_dato_inmediato, o_dato_rb,
+        o_dato_ra, o_signals[REG_DST], o_signals[ALU_SRC],o_signals[OP2:OP0],
+        o_signals[SHIFT_SRC], o_signals[DATA_MASK_1:DATA_MASK_0],
+        o_signals[MEM_WRITE], o_signals[MEM_READ],  o_signals[IS_UNSIGNED],
+        o_signals[REG_WRITE], o_signals[MEM_TO_REG],o_signals[J_RETURN_DST]}, 
     de_id_a_ex
 );
 
@@ -256,37 +257,37 @@ id_ex_latch(
 
 execution EX(
     .i_shift_src(de_id_a_ex[8]),
-    .i_reg_dst(de_id_a_ex[11]),
-    .i_alu_src(de_id_a_ex[10]),
-    .i_alu_op(de_id_a_ex[9]),
-    .i_ra_data(de_id_a_ex[43:12]),
-    .i_rb_data(de_id_a_ex[75:44]),
-    .i_sign_extender_data(de_id_a_ex[106:76]), 
-    .i_rt_address(de_id_a_ex[111:107]),
-    .i_rd_address(de_id_a_ex[116:112]),
-    output  [5 - 1 : 0]     o_reg_address,
-    output  [32 - 1 : 0]    o_mem_data,
-    output  [32 - 1 : 0]    o_alu_data
+    .i_reg_dst(de_id_a_ex[13]),
+    .i_alu_src(de_id_a_ex[12]),
+    .i_alu_op(de_id_a_ex[11:9]),
+    .i_ra_data(de_id_a_ex[45:14]),
+    .i_rb_data(de_id_a_ex[77:46]),
+    .i_sign_extender_data(de_id_a_ex[109:78]), 
+    .i_rt_address(de_id_a_ex[114 : 110]),
+    .i_rd_address(de_id_a_ex[119 : 115]),
+    .o_reg_address(o_reg_address),
+    .o_mem_data(o_mem_data),
+    .o_alu_data(o_alu_data)
 );
 
 /*====================================== Latch EX/MEM ======================================*/
-
+wire    [77-1:0]  de_ex_a_mem;
 latch #(
-    .BUS_DATA(77),
+    .BUS_DATA(77)
 )
 ex_mem_latch(
     i_clk,
     i_reset,
-    i_latches_en[1] || ,//enable de la hazard unit
-    ,{o_reg_address, o_mem_data, o_alu_data, de_id_a_ex[5:0]} //instrucción concatenada con la salida de la program counter 
+    i_latches_en[1],
+    {o_reg_address, o_mem_data, o_alu_data, de_id_a_ex[5:0]},  
     de_ex_a_mem
 );
 
 /*====================================== Memory Access ======================================*/
 
 memory_access MEM(
-    i_clk,
-    i_reset,
+    .i_clk(i_clk),
+    .i_reset(i_reset),
     .i_wr_mem(de_ex_a_mem[4]),
     .i_is_unsigned(de_ex_a_mem[3]),
     .i_data_mask(de_ex_a_mem[6:5]), 
@@ -294,19 +295,31 @@ memory_access MEM(
     .i_data(de_ex_a_mem[70:39]),
     .i_debug_pointer(i_debug_ptr_mem),
     .o_debug_read(o_debug_read_mem),
-    o_data
+    .o_data(o_data_salida_de_memoria)
 );
 
 /*====================================== Latch MEM/WB ======================================*/
-
+wire    [72-1:0]  de_mem_a_wb;
 latch #(
-    .BUS_DATA(72),
+    .BUS_DATA(72)
 )
 mem_wb_latch(
     i_clk,
     i_reset,
-    i_latches_en[0] || ,//enable de la hazard unit
-    {de_ex_a_mem[38:7], de_ex_a_mem[76:71], o_data, de_id_a_ex[2:0]} //instrucción concatenada con la salida de la program counter 
+    i_latches_en[0],
+    {de_ex_a_mem[38:7], de_ex_a_mem[76:71], o_data_salida_de_memoria, de_ex_a_mem[2:0]}, 
     de_mem_a_wb
+);
+write_back WB(
+    .i_dato_de_mem(de_mem_a_wb[34:3]),
+    .i_dato_de_reg(de_mem_a_wb[71:40]),
+        //direcciones
+    .i_direc_reg(de_mem_a_wb[39:35]), 
+        //seniales de control
+    .i_j_return_dest(de_mem_a_wb[0]),
+    .i_mem_to_reg(de_mem_a_wb[1]),
+        
+    .o_dato(dato_salido_wb),
+    .o_direccion(direccion_de_wb)
 );
 endmodule

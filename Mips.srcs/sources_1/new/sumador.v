@@ -26,5 +26,5 @@ module sumador#(
     input [TAM_DATO-1:0] i_a, i_b,
     output [TAM_DATO-1:0] o_result
 );
-    assign out_result = i_a + i_b;
+    assign o_result = i_a + i_b;
 endmodule

@@ -73,7 +73,8 @@ module execution(
         i_ra_data,
         o_shift_data,
         o_alu_func, //entrada con la función a ejecutar
-        o_alu_data
+        o_alu_data,
+        zero_bit
     );
 
     assign o_mem_data = i_rb_data;
