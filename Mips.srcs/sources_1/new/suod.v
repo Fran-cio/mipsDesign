@@ -221,23 +221,20 @@ module suod#(
          end
          bootloader:
          begin
+            if(~i_fifo_empty)
             begin
-                if(~i_fifo_empty)
-                begin
-                    bootload_byte_next  =   i_orden;
-                    bootload_write_next =   1;
-                    read_enable_reg     =   1;
-                    instruccion_counter =   instruccion_counter + 1;                        
-                end
-                else
-                    bootload_write_next =   0;
-            end
-            if(instruccion_counter ==   0)
-                if(i_orden[6]   ==  1)
+                bootload_byte_next  =   i_orden;
+                bootload_write_next =   1;
+                read_enable_reg     =   1;
+                if(instruccion_counter == 0 && i_orden[6]==1)
                 begin
                     bootload_write_next =   0; 
                     state_next          =   idle;               
-                end       
+                end    
+                instruccion_counter =   instruccion_counter + 1;                        
+            end
+            else
+                bootload_write_next =   0;
          end
          run:
          begin

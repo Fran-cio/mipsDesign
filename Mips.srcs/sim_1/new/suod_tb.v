@@ -117,70 +117,70 @@ module suod_tb;
         i_reset = 1;
         #DATA_TIME
         i_reset = 0;
-        i_rd    =0;
-        i_wr=1;
-        in = "P";
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr    =1;
-        in = "C"; // 255 representado en hexa de N bits
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr    =1;
-        in = "R"; // 255 representado en hexa de N bits
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME 
-        i_wr=1;   
-        in = "T";
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = "E"; // 2 representado en hexa de N bits;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = "M";
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = ","; // operaci?n 0 representada en un hexa de M bits
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = "N"; // Addition
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
+//        i_rd    =0;
+//        i_wr=1;
+//        in = "P";
+//        #2
+//        i_wr=0;
+//        i_rd    =1;
+//        #1
+//        i_rd    =0;
+//        #DATA_TIME
+//        i_wr    =1;
+//        in = "C"; // 255 representado en hexa de N bits
+//        #2
+//        i_wr=0;
+//        i_rd    =1;
+//        #1
+//        i_rd    =0;
+//        #DATA_TIME
+//        i_wr    =1;
+//        in = "R"; // 255 representado en hexa de N bits
+//        #2
+//        i_wr=0;
+//        i_rd    =1;
+//        #1
+//        i_rd    =0;
+//        #DATA_TIME 
+//        i_wr=1;   
+//        in = "T";
+//        #2
+//        i_wr=0;
+//        i_rd    =1;
+//        #1
+//        i_rd    =0;
+//        #DATA_TIME
+//        i_wr=1;
+//        in = "E"; // 2 representado en hexa de N bits;
+//        #2
+//        i_wr=0;
+//        i_rd    =1;
+//        #1
+//        i_rd    =0;
+//        #DATA_TIME
+//        i_wr=1;
+//        in = "M";
+//        #2
+//        i_wr=0;
+//        i_rd    =1;
+//        #1
+//        i_rd    =0;
+//        #DATA_TIME
+//        i_wr=1;
+//        in = ","; // operaci?n 0 representada en un hexa de M bits
+//        #2
+//        i_wr=0;
+//        i_rd    =1;
+//        #1
+//        i_rd    =0;
+//        #DATA_TIME
+//        i_wr=1;
+//        in = "N"; // Addition
+//        #2
+//        i_wr=0;
+//        i_rd    =1;
+//        #1
+//        i_rd    =0;
         #DATA_TIME
         i_rd    =0;
         i_wr=1;
