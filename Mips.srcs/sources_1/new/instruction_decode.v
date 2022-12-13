@@ -60,6 +60,7 @@ module instruction_decode#(
     output  [TAM_DATA - 1 : 0]          o_dato_rb,
     output  [TAM_DATA - 1 : 0]          o_dato_inmediato,
     
+    output  [TAM_DIREC_REG - 1 : 0]     o_direccion_rs,
     output  [TAM_DIREC_REG - 1 : 0]     o_direccion_rt,
     output  [TAM_DIREC_REG - 1 : 0]     o_direccion_rd,
     // A control
@@ -134,6 +135,7 @@ module instruction_decode#(
     assign  o_dato_ra_para_condicion    =   salida_de_forwarding_dato_a;  
     assign  o_dato_rb_para_condicion    =   o_dato_rb;
     assign  o_direccion_rd              =   i_instruccion[15:11]; 
+    assign  o_direccion_rs              =   i_instruccion[25:21]; 
     assign  o_direccion_rt              =   i_instruccion[20:16]; 
 
 endmodule

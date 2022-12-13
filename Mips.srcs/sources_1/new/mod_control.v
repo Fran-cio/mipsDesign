@@ -20,14 +20,18 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module mod_control(
-        input [6 - 1 : 0]           i_function,
-        input [6 - 1 : 0]           i_operation,
-        input                       i_enable_control,
-        output [18 - 1 : 0]         o_control
-    );
+module mod_control #(
+    parameter FUN_SIZE = 6,
+    parameter SIGNALS_SIZE = 18
+)
+(
+    input   [FUN_SIZE - 1 : 0]      i_function,
+    input   [FUN_SIZE - 1 : 0]      i_operation,
+    input                           i_enable_control,
+    output  [SIGNALS_SIZE - 1 : 0]  o_control
+);
 
-    reg [18 - 1 : 0] o_control_data;
+    reg [SIGNALS_SIZE - 1 : 0] o_control_data;
 //  17	    16	    15	      14	 13	     12   11	10	  9	      8	      7	      6	       5	    4	     3	       2	      1        0
 //RegDst MemToReg MemRead	Branch MemWrite	Ope2 Ope1 Ope0 ALUSrc RegWrite ShiftSrc JmpSrc JReturnDst EQorNE DataMask1 DataMask0 IsUnsigned JmpOrBrch
     always @(*)  

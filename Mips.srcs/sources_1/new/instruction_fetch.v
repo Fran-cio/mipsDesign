@@ -19,21 +19,25 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-module instruction_fetch(
-    input                   i_clk,
-    input                   i_reset,
-    input                   i_pc_reset,
-    input                   i_stall,
-    input   [32 - 1 : 0]    i_new_pc,
-    input                   i_bootloader_write_enable,
-    input   [8 - 1 : 0]     i_byte_de_bootloader, //la word que nos envía la suod a través del formador de palabras
-    output  [32 - 1 : 0]    o_instruction,
-    output                  o_is_end, //cuando se termina de cargar la memoria de inst
-    output  [32 - 1 : 0]    o_pc_value
+module instruction_fetch #(
+        parameter   TAM_DATA = 32,
+        parameter   BYTE = 8
+    )
+    (
+        input                           i_clk,
+        input                           i_reset,
+        input                           i_pc_reset,
+        input                           i_stall,
+        input   [TAM_DATA - 1 : 0]      i_new_pc,
+        input                           i_bootloader_write_enable,
+        input   [BYTE - 1 : 0]          i_byte_de_bootloader, //la word que nos envía la suod a través del formador de palabras
+        output  [TAM_DATA - 1 : 0]      o_instruction,
+        output                          o_is_end, //cuando se termina de cargar la memoria de inst
+        output  [TAM_DATA - 1 : 0]      o_pc_value
 );
 
 latch#(
-    .BUS_DATA(32)
+    .BUS_DATA(TAM_DATA)
 )pc_unit(
     i_clk,
     (i_reset | i_pc_reset),
