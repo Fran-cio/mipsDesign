@@ -19,20 +19,29 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-module execution(
-    input                   i_shift_src,
-    input                   i_reg_dst,
-    input                   i_alu_src,
-    input   [3 - 1 : 0]     i_alu_op,
-    input   [32 - 1 : 0]    i_ra_data,
-    input   [32 - 1 : 0]    i_rb_data,
-    input   [32 - 1 : 0]    i_sign_extender_data, 
-    input   [5 - 1 : 0]     i_rt_address,
-    input   [5 - 1 : 0]     i_rd_address,
-    output  [5 - 1 : 0]     o_reg_address,
-    output  [32 - 1 : 0]    o_mem_data,
-    output  [32 - 1 : 0]    o_alu_data
+module execution#(
+    parameter TAM_FUNC = 6,
+    parameter TAM_DIREC = 5,
+    parameter TAM_DATA = 32
+
+)(
+    input                       i_shift_src,
+    input                       i_reg_dst,
+    input                       i_alu_src,
+    input   [3 - 1 : 0]         i_alu_op,
+    input   [TAM_DATA - 1 : 0]  i_ra_data,
+    input   [TAM_DATA - 1 : 0]  i_rb_data,
+    input   [TAM_DATA - 1 : 0]  i_sign_extender_data, 
+    input   [TAM_DIREC - 1 : 0] i_rt_address,
+    input   [TAM_DIREC - 1 : 0] i_rd_address,
+    output  [TAM_DIREC - 1 : 0] o_reg_address,
+    output  [TAM_DATA - 1 : 0]  o_mem_data,
+    output  [TAM_DATA - 1 : 0]  o_alu_data
 );
+wire    [TAM_FUNC - 1 : 0]  o_alu_func;
+wire    [TAM_DATA - 1 : 0]  o_mux_alu_data;
+wire    [TAM_DATA - 1 : 0]  o_shift_data;
+
     mux #(
         .BITS_ENABLES(1),
         .BUS_SIZE(5)

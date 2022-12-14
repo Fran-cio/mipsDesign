@@ -19,18 +19,24 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-module memory_access(
-    input                   i_clk,
-    input                   i_reset,
-    input                   i_wr_mem,
-    input                   i_is_unsigned,
-    input   [2 - 1 :  0]    i_data_mask, 
-    input   [32 - 1 : 0]    i_direc_mem,
-    input   [32 - 1 : 0]    i_data,
-    input   [32 - 1 : 0]    i_debug_pointer,
-    output  [32 - 1 : 0]    o_debug_read,
-    output  [32 - 1 : 0]    o_data
+module memory_access#(
+    parameter   NUM_BYTES   =   4,
+    parameter   TAM_MASK    =   2,
+    parameter   TAM_DATA    =   32
+)(
+    input                       i_clk,
+    input                       i_reset,
+    input                       i_wr_mem,
+    input                       i_is_unsigned,
+    input   [TAM_MASK - 1 : 0]  i_data_mask, 
+    input   [TAM_DATA - 1 : 0]  i_direc_mem,
+    input   [TAM_DATA - 1 : 0]  i_data,
+    input   [TAM_DATA - 1 : 0]  i_debug_pointer,
+    output  [TAM_DATA - 1 : 0]  o_debug_read,
+    output  [TAM_DATA - 1 : 0]  o_data
 );
+wire    [NUM_BYTES-1 : 0]   bits_de_mascara_a_memoria;
+wire    [TAM_DATA-1 : 0]    dato_de_memoria_a_signador;
 
 mask_a_byte mask(
     i_data_mask,

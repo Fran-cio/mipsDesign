@@ -180,7 +180,7 @@ mux_eq_neq(
     .o_data(o_mux_eq_neq)
 );
 
-assign i_eq_neq = o_dato_ra_para_condicion ^ o_dato_rb_para_condicion;
+assign i_eq_neq = o_dato_ra_para_condicion != o_dato_rb_para_condicion;
 
 /*====================================== Sumador IMMEDIATE ======================================*/
 sumador #(

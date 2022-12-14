@@ -68,7 +68,8 @@ module instruction_decode#(
     // Flags de control
     input                               i_jump_o_branch
     );
-    
+    wire  [TAM_DATA - 1 : 0]          salida_de_forwarding_dato_a;
+
     mux #(
         .BITS_ENABLES(1),
         .BUS_SIZE(TAM_DATA)
