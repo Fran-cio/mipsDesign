@@ -21,10 +21,11 @@
 
 
 module instruction_decode#(
-        parameter   TAM_DATA        =   32,
-        parameter   TAM_CAMPO_JUMP  =   26,
-        parameter   TAM_CAMPO_OP    =   5,
-        parameter   TAM_DIREC_REG   =   5       
+        parameter   TAM_DATA                =   32,
+        parameter   TAM_CAMPO_JUMP          =   26,
+        parameter   TAM_CAMPO_OP            =   6,
+        parameter   TAM_DIREC_REG           =   5,
+        parameter   TAM_CORTOCIRC_ENABLES   =   2      
     )(
     input                               i_clk,
     input                               i_reset,
@@ -68,7 +69,13 @@ module instruction_decode#(
     // Flags de control
     input                               i_jump_o_branch
     );
-    wire  [TAM_DATA - 1 : 0]          salida_de_forwarding_dato_a;
+    wire  [TAM_DATA - 1 : 0]                       salida_de_forwarding_dato_a;
+    wire  [TAM_DATA - 1 : 0]                       salida_del_ra;
+    wire  [TAM_DATA - 1 : 0]                       salida_del_rb;
+
+    wire  [TAM_CORTOCIRC_ENABLES - 1 : 0]          bits_de_forward_a;
+    wire  [TAM_CORTOCIRC_ENABLES - 1 : 0]          bits_de_forward_b;
+
 
     mux #(
         .BITS_ENABLES(1),

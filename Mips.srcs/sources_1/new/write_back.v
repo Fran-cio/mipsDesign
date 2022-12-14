@@ -42,7 +42,7 @@ module write_back#(
         .BUS_SIZE(TAM_DATA)
     )mux_de_mem_o_reg(
         i_mem_to_reg,
-        {i_dato_de_reg,i_dato_de_mem},
+        {i_dato_de_mem,i_dato_de_reg},
         o_dato
     ); 
     

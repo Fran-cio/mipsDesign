@@ -34,6 +34,7 @@ module instruction_fetch #(
         output  [TAM_DATA - 1 : 0]      o_instruction,
         output                          o_is_end, //cuando se termina de cargar la memoria de inst
         output  [TAM_DATA - 1 : 0]      o_pc_value
+
 );
 
 wire    [TAM_DATA-1:0]  valor_de_pc;

@@ -40,19 +40,19 @@ module mod_control #(
         begin        
             casez({i_operation, i_function})
                 12'b1?0?????????:
-                    o_control_data = {14'b0110000011001x,i_operation[1],i_operation[0],i_operation[2],1'b0}; 
+                    o_control_data = {14'b01100000110000,i_operation[1],i_operation[0],i_operation[2],1'b0}; 
                 12'b1?1?????????: 
-                    o_control_data = {14'bxx00100010001x,i_operation[1],i_operation[0],i_operation[2],1'b0};
+                    o_control_data = {14'b00001000100000,i_operation[1],i_operation[0],i_operation[2],1'b0};
                 12'b0?1?????????:  
-                    o_control_data = {5'b10000, i_operation[2],i_operation[1],i_operation[0], 10'b11001x1100};
+                    o_control_data = {5'b10000, i_operation[2],i_operation[1],i_operation[0], 10'b1100001100};
                 12'b0?01????????: 
-                    o_control_data = {13'bxx01000000x11, i_operation[0], 4'b1100};
+                    o_control_data = {13'b0001000000010, i_operation[0], 4'b1100};
                 12'b0?001???????: 
-                    o_control_data = {9'b1x0000000,i_operation[0],8'bx11x1101};
+                    o_control_data = {9'b100000000,i_operation[0],8'b01001101};
                 12'b0?000?0?1???: 
-                    o_control_data = {9'b1x0000000, i_function[0],8'bx00x1101};
+                    o_control_data = {9'b100000000, i_function[0],8'b00101101};
                 default: // 001 Para que la Alu Control use el campo FUNC
-                    o_control_data = {9'b100000010,i_function[5] | i_function[2],8'b1xxx1100};
+                    o_control_data = {10'b0000000101,~(i_function[5] | i_function[2]),7'b0001100};
             endcase
         end
         else

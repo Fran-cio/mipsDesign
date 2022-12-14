@@ -22,16 +22,17 @@
 module memory_access#(
     parameter   NUM_BYTES   =   4,
     parameter   TAM_MASK    =   2,
-    parameter   TAM_DATA    =   32
+    parameter   TAM_DATA    =   32,
+    parameter   NUM_DIREC   =   7
 )(
     input                       i_clk,
     input                       i_reset,
     input                       i_wr_mem,
     input                       i_is_unsigned,
     input   [TAM_MASK - 1 : 0]  i_data_mask, 
-    input   [TAM_DATA - 1 : 0]  i_direc_mem,
+    input   [NUM_DIREC - 1 : 0] i_direc_mem,
     input   [TAM_DATA - 1 : 0]  i_data,
-    input   [TAM_DATA - 1 : 0]  i_debug_pointer,
+    input   [NUM_DIREC - 1 : 0] i_debug_pointer,
     output  [TAM_DATA - 1 : 0]  o_debug_read,
     output  [TAM_DATA - 1 : 0]  o_data
 );

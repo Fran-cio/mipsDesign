@@ -22,8 +22,9 @@
 module mips#(
         parameter   TAM_DATA        =   32,
         parameter   TAM_CAMPO_JUMP  =   26,
-        parameter   TAM_CAMPO_OP    =   5,
-        parameter   TAM_DIREC_REG   =   5,   
+        parameter   TAM_CAMPO_OP    =   6,
+        parameter   TAM_DIREC_REG   =   5,
+        parameter   TAM_DIREC_MEM   =   7,      
         parameter   NUM_LATCHS      =   5,
         parameter   SIGNALS_SIZE    =   18       
     
@@ -34,8 +35,8 @@ module mips#(
         input                           i_pc_reset,
         input   [NUM_LATCHS - 1 :  0]   i_latches_en,
         input   [8 - 1 : 0]  i_bootload_byte,
-        input   [TAM_DATA - 1 : 0]      i_debug_ptr_mem,
-        input   [TAM_DATA - 1 : 0]      i_debug_ptr_reg,
+        input   [TAM_DIREC_MEM - 1 : 0] i_debug_ptr_mem,
+        input   [TAM_DIREC_REG - 1 : 0] i_debug_ptr_reg,
         
         output                          o_is_end,
         output  [TAM_DATA - 1 : 0]      o_debug_read_reg,
@@ -84,7 +85,7 @@ wire    [SIGNALS_SIZE-1:0]      o_signals;
 wire    [TAM_DATA-1:0]          o_dato_ra_para_condicion;
 wire    [TAM_DATA-1:0]          o_dato_rb_para_condicion;
 wire    [TAM_DATA-1:0]          o_dato_direc_branch;
-wire    [TAM_DATA-1:0]          o_dato_direc_jump;
+wire    [TAM_CAMPO_JUMP-1:0]    o_dato_direc_jump;
 wire    [TAM_DATA-1:0]          o_dato_ra;
 wire    [TAM_DATA-1:0]          o_dato_rb;
 wire    [TAM_DATA-1:0]          o_dato_inmediato;
@@ -99,7 +100,7 @@ wire    [TAM_DATA-1:0]          o_mem_data;
 wire    [TAM_DATA-1:0]          o_alu_data;
 wire    [TAM_DIREC_REG-1:0]     o_reg_address;
 /*====================================== Latch EX/MEM ======================================*/
-wire    [77-1:0]                de_ex_a_mem;
+wire    [76-1:0]                de_ex_a_mem;
 /*====================================== Memory Access ======================================*/
 wire    [TAM_DATA-1:0]          o_data_salida_de_memoria;
 /*====================================== Latch MEM/WB ======================================*/
@@ -115,7 +116,7 @@ IF(
     .i_clk(i_clk),
     .i_reset(i_reset),
     .i_pc_reset(i_pc_reset),
-    .i_stall(stall_latch),
+    .i_stall(i_latches_en[4] && stall_latch),
     .i_new_pc(new_pc),
     .i_bootloader_write_enable(i_bootload_wr_en),
     .i_byte_de_bootloader(i_bootload_byte),
@@ -132,7 +133,7 @@ latch #(
 if_id_latch(
     .i_clock(i_clk),
     .i_reset(i_reset),
-    .i_enable(i_latches_en[3] || stall_latch),
+    .i_enable(i_latches_en[3] && stall_latch),
     .i_data({instruction, pc_value}), 
     .o_data(de_if_a_id)
 );
@@ -155,7 +156,7 @@ mux #(
 )
 mux_dir(
     .i_en(o_signals[JMP_SRC]),
-    .i_data({o_dato_direc_jump << 2, o_dato_ra_para_condicion}), 
+    .i_data({{6'b0,o_dato_direc_jump} << 2, o_dato_ra_para_condicion}), 
     .o_data(o_mux_dir)
 );
 
@@ -224,7 +225,7 @@ mod_control#(
     .SIGNALS_SIZE(18)
 )
 control_unit(
-    .i_function(de_if_a_id[36 : 32]), 
+    .i_function(de_if_a_id[37 : 32]), 
     .i_operation(o_campo_op), 
     .i_enable_control(stall_ctl),
     .o_control(o_signals)
@@ -236,14 +237,14 @@ instruction_decode ID(
     //Intruccion
     .i_instruccion(de_if_a_id[63:32]),
     // Cortocircuito
-    .i_reg_write_id_ex(de_id_a_ex[3]),
-    .i_reg_write_ex_mem(de_ex_a_mem[3]),
-    .i_reg_write_mem_wb(de_mem_a_wb[3]),
+    .i_reg_write_id_ex(de_id_a_ex[2]),
+    .i_reg_write_ex_mem(de_ex_a_mem[2]),
+    .i_reg_write_mem_wb(de_mem_a_wb[2]),
     .i_direc_rd_id_ex(o_reg_address), 
-    .i_direc_rd_ex_mem(de_id_a_ex[5:0]),     
+    .i_direc_rd_ex_mem(de_id_a_ex[4:0]),     
     .i_direc_rd_mem_wb(direccion_de_wb),     
     .i_dato_de_id_ex(o_alu_data), 
-    .i_dato_de_ex_mem(o_data_salida_de_memoria), 
+    .i_dato_de_ex_mem(de_ex_a_mem[38:7]), 
     .i_dato_de_mem_wb(dato_salido_wb), 
     //Al registro
     .i_dato_de_escritura_en_reg(dato_salido_wb),
@@ -275,13 +276,13 @@ instruction_decode ID(
 
 /*====================================== Latch ID/EX ======================================*/
 latch #(
-    .BUS_DATA(118)
+    .BUS_DATA(120)
 )
 id_ex_latch(
     i_clk,
     i_reset,
     i_latches_en[2],
-    {   o_direccion_rd, o_direccion_rd,o_dato_inmediato, o_dato_rb,
+    {   o_direccion_rd, o_direccion_rt,o_dato_inmediato, o_dato_rb,
         o_dato_ra, o_signals[REG_DST], o_signals[ALU_SRC],o_signals[OP2:OP0],
         o_signals[SHIFT_SRC], o_signals[DATA_MASK_1:DATA_MASK_0],
         o_signals[MEM_WRITE], o_signals[MEM_READ],  o_signals[IS_UNSIGNED],
@@ -307,13 +308,13 @@ execution EX(
 
 /*====================================== Latch EX/MEM ======================================*/
 latch #(
-    .BUS_DATA(77)
+    .BUS_DATA(76)
 )
 ex_mem_latch(
     i_clk,
     i_reset,
     i_latches_en[1],
-    {o_reg_address, o_mem_data, o_alu_data, de_id_a_ex[5:0]},  
+    {o_reg_address, o_mem_data, o_alu_data, de_id_a_ex[6:0]},  
     de_ex_a_mem
 );
 
@@ -339,7 +340,7 @@ mem_wb_latch(
     i_clk,
     i_reset,
     i_latches_en[0],
-    {de_ex_a_mem[38:7], de_ex_a_mem[76:71], o_data_salida_de_memoria, de_ex_a_mem[2:0]}, 
+    {de_ex_a_mem[38:7], de_ex_a_mem[75:71], o_data_salida_de_memoria, de_ex_a_mem[2:0]}, 
     de_mem_a_wb
 );
 /*====================================== Write Back ======================================*/

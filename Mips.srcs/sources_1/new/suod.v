@@ -24,7 +24,9 @@ module suod#(
      parameter NUM_LATCH = 5,     
                TAM_ORDEN = 8,  
                TAM_DATA  = 32,
-               TAM_DIREC_REG = 5
+               TAM_DIREC_REG = 5,
+               TAM_DIREC_MEM = 7
+
    )
    (
     input                       i_clk, i_reset, i_is_end,
@@ -39,7 +41,7 @@ module suod#(
     output  [TAM_DIREC_REG-1:0] o_debug_direcc_reg,
     // Lectura en memoria
     input   [TAM_DATA-1:0]      i_debug_read_mem,
-    output  [TAM_DIREC_REG-1:0] o_debug_direcc_mem,
+    output  [TAM_DIREC_MEM-1:0] o_debug_direcc_mem,
     // interaccion con el pc
     input   [TAM_DATA-1:0]      i_read_pc,
     output                      o_pc_reset,
@@ -48,7 +50,9 @@ module suod#(
     output                      o_read_enable,
     
     output                      o_bootload_write,
-    output   [TAM_ORDEN-1:0]    o_bootload_byte
+    output   [TAM_ORDEN-1:0]    o_bootload_byte,
+    output                      o_programa_cargado
+
    );
     
    // symbolic state declaration
@@ -82,15 +86,14 @@ module suod#(
    reg                      bootload_write_reg, bootload_write_next;
    reg  [TAM_ORDEN-1:0]     bootload_byte_reg, bootload_byte_next;
    reg                      read_enable_reg;
-
-   reg  [1:0]                instruccion_counter;
+   reg                      programa_cargado_reg,   programa_cargado_next;
+   reg  [1:0]               instruccion_counter_reg, instruccion_counter_next;
 
    // body
    // FSMD state & data registers
    always @(posedge i_clk)
       if (i_reset)
          begin      
-            instruccion_counter     <=  0;
             state_reg               <=  idle;
             enable_latch_reg        <=  0;
             enable_enviada_data_reg <=  0;
@@ -99,13 +102,14 @@ module suod#(
    
             debug_direcc_reg_reg    <=  1;
    
-            debug_direcc_mem_reg    <=  1;
+            debug_direcc_mem_reg    <=  4;
    
             pc_reset_reg            <=  0;
 
+            instruccion_counter_reg <=  0;
             bootload_write_reg      <=  0;
             bootload_byte_reg       <=  0;
-            read_enable_reg         <=  0;
+            programa_cargado_reg    <=  0;
          end
       else
          begin
@@ -120,8 +124,12 @@ module suod#(
    
             pc_reset_reg            <= pc_reset_next;
 
+            instruccion_counter_reg <= instruccion_counter_next;
             bootload_write_reg      <= bootload_write_next;
             bootload_byte_reg       <= bootload_byte_next;
+            
+            programa_cargado_reg    <=  programa_cargado_next;
+
          end
 
    // FSMD next-state logic
@@ -138,8 +146,12 @@ module suod#(
         
         pc_reset_next           =   pc_reset_reg;
         
+        instruccion_counter_next=   instruccion_counter_reg;
         bootload_write_next     =   bootload_write_reg;
         bootload_byte_next      =   bootload_byte_reg;   
+        
+        programa_cargado_next   =   programa_cargado_reg;
+
         
         read_enable_reg         =   0;
         
@@ -152,6 +164,7 @@ module suod#(
             enable_enviada_data_next    =   0;
             pc_reset_next               =   0;
             bootload_write_next         =   0;
+            instruccion_counter_next    =   0;
             if(~i_fifo_empty)
             begin
                 case(i_orden)
@@ -226,12 +239,13 @@ module suod#(
                 bootload_byte_next  =   i_orden;
                 bootload_write_next =   1;
                 read_enable_reg     =   1;
-                if(instruccion_counter == 0 && i_orden[6]==1)
+                if(instruccion_counter_reg == 0 && i_orden[6]==1)
                 begin
-                    bootload_write_next =   0; 
-                    state_next          =   idle;               
+                    bootload_write_next     =   0; 
+                    programa_cargado_next   =   1;
+                    state_next              =   idle;               
                 end    
-                instruccion_counter =   instruccion_counter + 1;                        
+                instruccion_counter_next   =   instruccion_counter_reg + 1;                        
             end
             else
                 bootload_write_next =   0;
@@ -264,4 +278,6 @@ module suod#(
     // Escritura de la memoria de boot
     assign  o_bootload_write        =   bootload_write_reg;
     assign  o_bootload_byte         =   bootload_byte_reg;
+    
+    assign  o_programa_cargado      =   programa_cargado_reg;
 endmodule
