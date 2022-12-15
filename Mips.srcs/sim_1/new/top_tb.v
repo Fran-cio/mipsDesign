@@ -24,7 +24,7 @@ module top_tb;
     parameter TICKS      = 16;
     parameter MOD_COUNT  = 651;
     parameter CLK_PERIOD = 20; //ns
-    parameter DATA_TIME  = TICKS * MOD_COUNT * CLK_PERIOD*2;
+    parameter DATA_TIME  = TICKS * MOD_COUNT * CLK_PERIOD;
 
     localparam BUS_OP_SIZE = 6;
     localparam BUS_SIZE = 8;  
@@ -135,7 +135,7 @@ module top_tb;
         #2
         i_rd    =0;
         i_wr=1;
-        in = "B"; // Subtraction
+        in = "B"; 
         #2
         i_wr=0;
         i_rd    =1;
@@ -143,7 +143,7 @@ module top_tb;
         i_rd    =0;
         #DATA_TIME
         i_wr=1;
-        in = 8'b00100000; // SRA 
+        in = 8'b00100000; 
         #2
         i_wr=0;
         i_rd    =1;
@@ -151,7 +151,7 @@ module top_tb;
         i_rd    =0;
         #DATA_TIME
         i_wr=1;
-        in = 8'b00000100; //  Logical xor
+        in = 8'b00000100; 
         #2
         i_wr=0;
         i_rd    =1;
@@ -159,7 +159,7 @@ module top_tb;
         i_rd    =0;
         #DATA_TIME
         i_wr=1;
-        in = 8'b00000000; //  Logical or        
+        in = 8'b00011011;        
         #2
         i_wr=0; 
         i_rd    =1;
@@ -167,24 +167,16 @@ module top_tb;
         i_rd    =0; 
         #DATA_TIME
         i_wr=1;
-        in = 8'b01010101; //  Logical and 
+        in = 8'b11010011;
         #2
         i_wr=0;
         i_rd    =1;
         #1
         i_rd    =0;
-        // ADDI 4,0,55
+        // ADDI 4,0,7123
         #DATA_TIME
         i_wr=1;
-        in = 8'b00100000; // SRA 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000011; //  Logical xor
+        in = 8'b00100000; 
         #2
         i_wr=0;
         i_rd    =1;
@@ -192,7 +184,15 @@ module top_tb;
         i_rd    =0;
         #DATA_TIME
         i_wr=1;
-        in = 8'b00000000; //  Logical or        
+        in = 8'b00000011;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000000; 
         #2
         i_wr=0; 
         i_rd    =1;
@@ -200,16 +200,16 @@ module top_tb;
         i_rd    =0;
          #DATA_TIME
         i_wr=1;
-        in = 8'b00000101; //  Logical or        
+        in = 8'b01010101;        
         #2
         i_wr=0; 
         i_rd    =1;
         #1
         i_rd    =0;
-        // ADDI 3,0,5         
+        // ADDI 3,0,85         
         #DATA_TIME
         i_wr=1;
-        in = 8'b00000000; //  Logical and 
+        in = 8'b00000000; 
         #2
         i_wr=0;
         i_rd    =1;
@@ -217,7 +217,7 @@ module top_tb;
         i_rd    =0;
         #DATA_TIME
         i_wr=1;
-        in = 8'b10000011; // SRA 
+        in = 8'b10000011; 
         #2
         i_wr=0;
         i_rd    =1;
@@ -225,7 +225,7 @@ module top_tb;
         i_rd    =0;
         #DATA_TIME
         i_wr=1;
-        in = 8'b00101000; //  Logical xor
+        in = 8'b00101000;
         #2
         i_wr=0;
         i_rd    =1;
@@ -233,15 +233,375 @@ module top_tb;
         i_rd    =0;
         #DATA_TIME
         i_wr=1;
-        in = 8'b00100001; //  Logical or
+        in = 8'b00100001; 
         #2
         i_wr=0;
-        //ADDU  4,3,5      
+        //ADDU  4,3,5    
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000000;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b10000011; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00110000; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00100011; 
+        #2
+        i_wr=0;
+        //subu  4,3,6  
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000000;  
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b10000011;  
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00111000; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00100100; 
+        #2
+        i_wr=0;
+        //and  4,3,7
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000000;  
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b10000011; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b01000000; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00100101;    
+        #2
+        i_wr=0;
+        //or  4,3,8 
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000000;  
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b10000011; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b01001000; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00100110;    
+        #2
+        i_wr=0;
+        //xor  4,3,9
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000000;  
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b10000011; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b01010000; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00100111;    
+        #2
+        i_wr=0;
+        //nor  4,3,10
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000000;  
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b01100100;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b01011000; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00101010;    
+        #2
+        i_wr=0;
+        //slt  3,4,11 
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000000;  
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00001010;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b01100000; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b10000000;    
+        #2
+        i_wr=0;
+        //sll  12,10,2 
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000000;  
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00001010;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b01101000; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b10000010;    
+        #2
+        i_wr=0;
+        //srl  13,10,2 
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000000;  
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00001010;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b01110000; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b10000011;    
+        #2
+        i_wr=0;
+        //sra  14,10,2
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000001;  
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b01101010;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b01111000; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000100;    
+        #2
+        i_wr=0;
+        //sllv  15,10,11
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000001;  
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b01101010;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b10000000; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000110;    
+        #2
+        i_wr=0;
+        //srlv  16,10,11
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000001;  
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b01101010;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b10001000; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000111;    
+        #2
+        i_wr=0;
+        //srlv  17,10,11
         #DATA_TIME
         i_rd    =1;
         #1
         i_rd    =0;
-        in = 8'b11111111; //  Logical and 
+        in = 8'b11111111;    
         i_wr=1;
         #2
         i_wr=0;
@@ -249,7 +609,7 @@ module top_tb;
         i_rd    =1;
         #1
         i_rd    =0;
-        in = 8'b0; //  Logical and 
+        in = 8'b0;   
         i_wr=1;
         #2
         i_wr=0;
@@ -257,7 +617,7 @@ module top_tb;
         i_rd    =1;
         #1
         i_rd    =0;
-        in = 8'b0; //  Logical and 
+        in = 8'b0; 
         i_wr=1;
         #2
         i_wr=0;
@@ -265,7 +625,7 @@ module top_tb;
         i_rd    =1;
         #1
         i_rd    =0;
-        in = 8'b0; //  Logical and 
+        in = 8'b0; 
         i_wr=1;
         #2
         i_wr=0;
@@ -274,7 +634,7 @@ module top_tb;
         #1
         i_rd    =0;
         i_wr=1;
-        in = "G"; // Logical nor
+        in = "G"; 
         #2
         i_wr=0;
         i_rd    =1;

@@ -39,8 +39,8 @@ module execution#(
     output  [TAM_DATA - 1 : 0]  o_alu_data
 );
 wire    [TAM_FUNC - 1 : 0]  o_alu_func;
-wire    [TAM_DATA - 1 : 0]  o_mux_alu_data;
-wire    [TAM_DATA - 1 : 0]  o_shift_data;
+wire    [TAM_DATA - 1 : 0]  o_mux_alu_data_a;
+wire    [TAM_DATA - 1 : 0]  o_mux_alu_data_b;
 
     mux #(
         .BITS_ENABLES(1),
@@ -59,7 +59,7 @@ wire    [TAM_DATA - 1 : 0]  o_shift_data;
     mux_alu (
         i_alu_src,
         {i_sign_extender_data, i_rb_data},
-        o_mux_alu_data
+        o_mux_alu_data_b
     );
 
     mux #(
@@ -68,8 +68,8 @@ wire    [TAM_DATA - 1 : 0]  o_shift_data;
     )
     mux_shift (
         i_shift_src,
-        {{27'b0, i_sign_extender_data[10 : 6]},o_mux_alu_data},
-        o_shift_data
+        {{27'b0, i_sign_extender_data[10 : 6]},i_ra_data},
+        o_mux_alu_data_a
     );
 
     alu_control alu_control(
@@ -79,8 +79,8 @@ wire    [TAM_DATA - 1 : 0]  o_shift_data;
     );
 
     alu alu(
-        i_ra_data,
-        o_shift_data,
+        o_mux_alu_data_a,
+        o_mux_alu_data_b,
         o_alu_func, //entrada con la función a ejecutar
         o_alu_data,
         zero_bit

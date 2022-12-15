@@ -241,7 +241,7 @@ instruction_decode ID(
     .i_reg_write_ex_mem(de_ex_a_mem[2]),
     .i_reg_write_mem_wb(de_mem_a_wb[2]),
     .i_direc_rd_id_ex(o_reg_address), 
-    .i_direc_rd_ex_mem(de_id_a_ex[4:0]),     
+    .i_direc_rd_ex_mem(de_ex_a_mem[75:71]),     
     .i_direc_rd_mem_wb(direccion_de_wb),     
     .i_dato_de_id_ex(o_alu_data), 
     .i_dato_de_ex_mem(de_ex_a_mem[38:7]), 
