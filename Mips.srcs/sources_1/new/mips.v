@@ -33,6 +33,7 @@ module mips#(
         input                           i_reset,
         input                           i_bootload_wr_en,
         input                           i_pc_reset,
+        input                           i_borrar_programa,
         input   [NUM_LATCHS - 1 :  0]   i_latches_en,
         input   [8 - 1 : 0]  i_bootload_byte,
         input   [TAM_DIREC_MEM - 1 : 0] i_debug_ptr_mem,
@@ -114,7 +115,7 @@ instruction_fetch #(
 )
 IF(
     .i_clk(i_clk),
-    .i_reset(i_reset),
+    .i_reset(i_reset || i_borrar_programa),
     .i_pc_reset(i_pc_reset),
     .i_stall(i_latches_en[4] && stall_latch),
     .i_new_pc(new_pc),
@@ -131,7 +132,7 @@ latch #(
 )
 if_id_latch_pc_mas_cuatro(
     .i_clock(i_clk),
-    .i_reset(i_reset),
+    .i_reset(i_reset || i_pc_reset),
     .i_enable(i_latches_en[3] && stall_latch),
     .i_data(pc_value), 
     .o_data(de_if_a_id[31:0])
@@ -141,7 +142,7 @@ latch #(
 )
 if_id_latch_inst(
     .i_clock(i_clk),
-    .i_reset(i_reset || if_flush),
+    .i_reset(i_reset || if_flush || i_pc_reset),
     .i_enable(i_latches_en[3] && stall_latch),
     .i_data(instruction), 
     .o_data(de_if_a_id[63:32])
@@ -243,7 +244,7 @@ control_unit(
 /*====================================== Instruction Decode ======================================*/
 instruction_decode ID(
     .i_clk(i_clk),
-    .i_reset(i_reset),
+    .i_reset(i_reset || i_pc_reset),
     //Intruccion
     .i_instruccion(de_if_a_id[63:32]),
     // Cortocircuito
@@ -290,7 +291,7 @@ latch #(
 )
 id_ex_latch(
     i_clk,
-    i_reset,
+    i_reset || i_pc_reset,
     i_latches_en[2],
     {   o_direccion_rd, o_direccion_rt,o_dato_inmediato, o_dato_rb,
         o_dato_ra, o_signals[REG_DST], o_signals[ALU_SRC],o_signals[OP2:OP0],
@@ -322,7 +323,7 @@ latch #(
 )
 ex_mem_latch(
     i_clk,
-    i_reset,
+    i_reset || i_pc_reset,
     i_latches_en[1],
     {o_reg_address, o_mem_data, o_alu_data, de_id_a_ex[7:5], de_id_a_ex[3:0]},  
     de_ex_a_mem
@@ -331,7 +332,7 @@ ex_mem_latch(
 /*====================================== Memory Access ======================================*/
 memory_access MEM(
     .i_clk(i_clk),
-    .i_reset(i_reset),
+    .i_reset(i_reset|| i_pc_reset),
     .i_wr_mem(de_ex_a_mem[4]),
     .i_is_unsigned(de_ex_a_mem[3]),
     .i_mem_to_reg(de_ex_a_mem[1]),
@@ -349,7 +350,7 @@ latch #(
 )
 mem_wb_latch(
     i_clk,
-    i_reset,
+    i_reset || i_pc_reset,
     i_latches_en[0],
     {de_ex_a_mem[75:71], o_data_salida_de_memoria,de_ex_a_mem[2] ,de_ex_a_mem[0]}, 
     de_mem_a_wb

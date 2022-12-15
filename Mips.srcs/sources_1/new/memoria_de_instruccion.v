@@ -83,6 +83,6 @@ assign o_intruccion = reg_intruccion;
 
 // is_end nos permite vcerificar si hay instrucciones para ejecutarse
 // Ya no es necesario distinguir si es una halt o lo que sea.
-assign is_end               =    reg_write_ptr+12  <=  i_read_direc_intruccion; 
+assign is_end               =    reg_write_ptr+4  <=  i_read_direc_intruccion; 
 endmodule
 

@@ -43,6 +43,7 @@ module top_tb;
     reg[BUS_SIZE - 1 : 0] in;
     wire[BUS_SIZE - 1 : 0] out;
    
+    integer i;
 
     top fpga(
         i_clk,i_reset,
@@ -842,7 +843,196 @@ module top_tb;
         i_rd    =1;
         #1
         i_rd    =0;
-        // ORI 18,19,6230
+        // ORI 21,20,6230
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b10001100;  
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00010110;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000000; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00001100;    
+        #2
+        i_wr=0;
+        //LW  22,12(0)
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00111010; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b11010111; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00011000;        
+        #2
+        i_wr=0; 
+        i_rd    =1;
+        #1
+        i_rd    =0; 
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b01010110;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        // XORI 23,22,6230
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b10011100;  
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00011000;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000000; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00001100;    
+        #2
+        i_wr=0;
+        //LWU  24,12(0)
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00111100; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00011001; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00011000;        
+        #2
+        i_wr=0; 
+        i_rd    =1;
+        #1
+        i_rd    =0; 
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b01010110;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        // LUI 25,24,6230
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b10010000;  
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00011010;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000000; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00001100;    
+        #2
+        i_wr=0;
+//        LBU  26,12(0)
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00101011; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b01011011; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b01011000;        
+        #2
+        i_wr=0; 
+        i_rd    =1;
+        #1
+        i_rd    =0; 
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b01010110;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        // SLTI 25,24,6230
         #DATA_TIME
         i_rd    =1;
         #1
@@ -885,8 +1075,72 @@ module top_tb;
         i_wr=0;
         i_rd    =1;
         #1
+        for (i = 0 ; i < 32 ; i = i + 1)
+        begin
+            i_wr=1;        
+            in = "R";
+            #2
+            i_wr=0;
+            #DATA_TIME
+            i_wr=1;
+            in="T";
+            #2
+            i_wr=0;
+            #DATA_TIME
+            #DATA_TIME
+            #DATA_TIME
+            #DATA_TIME;
+        end
+        for (i = 0 ; i < 4 ; i = i + 1)
+        begin
+            i_wr=1;
+            in = "M";
+            #2
+            i_wr=0;
+            #DATA_TIME
+            i_wr=1;
+            in=",";
+            #2
+            i_wr=0;
+            #DATA_TIME
+            #DATA_TIME
+            #DATA_TIME
+            #DATA_TIME;
+        end
+        #DATA_TIME
+        i_rd    =1;
+        #1
         i_rd    =0;
-        #DATA_TIME       
+        i_wr=1;
+        in = "P"; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        i_wr=1;
+        in = "C"; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        i_wr=1;
+        in = "F"; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME      
         $finish;
     end
     

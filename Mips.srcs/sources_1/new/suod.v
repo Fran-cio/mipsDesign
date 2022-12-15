@@ -45,13 +45,15 @@ module suod#(
     // interaccion con el pc
     input   [TAM_DATA-1:0]      i_read_pc,
     output                      o_pc_reset,
+    output                      o_borrar_programa,
     // Escritura de la memoria de boot
     input                       i_fifo_empty,
     output                      o_read_enable,
     
     output                      o_bootload_write,
     output   [TAM_ORDEN-1:0]    o_bootload_byte,
-    output                      o_programa_cargado
+    output                      o_programa_cargado,
+    output                      o_programa_no_cargado
 
    );
     
@@ -68,7 +70,9 @@ module suod#(
       read_pc       =   4'b1000,
       reset_pc      =   4'b1001,
       bootloader    =   4'b1010,
-      run           =   4'b1011;
+      run           =   4'b1011,
+      flush_prog   =   4'b1100;
+
       
    reg  [3:0]               state_reg, state_next;
    
@@ -82,6 +86,7 @@ module suod#(
    reg  [TAM_DIREC_REG-1:0] debug_direcc_mem_reg, debug_direcc_mem_next;
    
    reg                      pc_reset_reg, pc_reset_next;
+   reg                      flush_programa_reg, flush_programa_next;
 
    reg                      bootload_write_reg, bootload_write_next;
    reg  [TAM_ORDEN-1:0]     bootload_byte_reg, bootload_byte_next;
@@ -105,6 +110,7 @@ module suod#(
             debug_direcc_mem_reg    <=  4;
    
             pc_reset_reg            <=  0;
+            flush_programa_reg      <=  0;
 
             instruccion_counter_reg <=  0;
             bootload_write_reg      <=  0;
@@ -123,6 +129,8 @@ module suod#(
             debug_direcc_mem_reg    <= debug_direcc_mem_next;
    
             pc_reset_reg            <= pc_reset_next;
+            flush_programa_reg      <= flush_programa_next;
+
 
             instruccion_counter_reg <= instruccion_counter_next;
             bootload_write_reg      <= bootload_write_next;
@@ -145,6 +153,8 @@ module suod#(
         debug_direcc_mem_next   =   debug_direcc_mem_reg;
         
         pc_reset_next           =   pc_reset_reg;
+        flush_programa_next     =   flush_programa_reg;
+
         
         instruccion_counter_next=   instruccion_counter_reg;
         bootload_write_next     =   bootload_write_reg;
@@ -165,6 +175,8 @@ module suod#(
             pc_reset_next               =   0;
             bootload_write_next         =   0;
             instruccion_counter_next    =   0;
+            flush_programa_next         =   0;
+            
             if(~i_fifo_empty)
             begin
                 case(i_orden)
@@ -176,6 +188,7 @@ module suod#(
                     "M":state_next = read_mem;
                     "N":state_next = dec_point_mem;
                     "C":state_next = reset_pc;
+                    "F":state_next = flush_prog;
                     "P":state_next = read_pc;
                     "B":state_next = bootloader;
                     "G":state_next = run;
@@ -213,18 +226,24 @@ module suod#(
          end
          inc_point_mem:
          begin
-            debug_direcc_mem_next   =   debug_direcc_mem_reg + 1;
+            debug_direcc_mem_next   =   debug_direcc_mem_reg + 4;
             state_next              =   idle; 
          end
          dec_point_mem:
          begin
-            debug_direcc_mem_next   =   debug_direcc_mem_reg - 1;
+            debug_direcc_mem_next   =   debug_direcc_mem_reg - 4;
             state_next              =   idle; 
          end
          reset_pc:
          begin
             pc_reset_next = 1;
             state_next    = idle; 
+         end
+         flush_prog:
+         begin
+            pc_reset_next           =   1;
+            flush_programa_next     =   1;
+            state_next              =   idle; 
          end
          read_pc:
          begin
@@ -275,9 +294,13 @@ module suod#(
     assign  o_debug_direcc_mem      =   debug_direcc_mem_reg;
     // interaccion con el pc
     assign  o_pc_reset              =   pc_reset_reg;
+    assign  o_borrar_programa       =   flush_programa_reg;
+
     // Escritura de la memoria de boot
     assign  o_bootload_write        =   bootload_write_reg;
     assign  o_bootload_byte         =   bootload_byte_reg;
     
     assign  o_programa_cargado      =   programa_cargado_reg;
+    assign  o_programa_no_cargado   =   ~programa_cargado_reg;
+    
 endmodule

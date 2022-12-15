@@ -36,7 +36,9 @@ module top#(
         output  o_test,
         input   i_Rx,
         output  o_Tx,
-        output  o_programa_cargado
+        output  o_programa_cargado,
+        output  o_programa_no_cargado
+
     );
     
     wire    [TAM_DATA - 1 : 0]      debug_read_reg_de_mips_a_suod,
@@ -58,6 +60,7 @@ module top#(
         i_reset,
         enable_write_de_suod_a_bootloader,
         pc_reset_de_mips_a_suod,
+        borrar_programa_de_mips_a_suod,
         enable_latch_de_suod_a_mips,
         byte_de_suod_a_bootloader,
         debug_direcc_mem_de_suod_a_mips,
@@ -87,12 +90,14 @@ module top#(
     // interaccion con el pc
             debug_read_pc_de_mips_a_suod,
             pc_reset_de_mips_a_suod,
+            borrar_programa_de_mips_a_suod,
     // Escritura de la memoria de boot
             fifo_vacia_de_uart_a_suod,
             read_enable_de_suod_a_uart,
             enable_write_de_suod_a_bootloader,
             byte_de_suod_a_bootloader,
-            o_programa_cargado      
+            o_programa_cargado,
+            o_programa_no_cargado     
         );       
      
      separador_bytes separadorDeBytes(
