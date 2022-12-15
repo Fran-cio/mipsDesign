@@ -29,15 +29,16 @@ module memory_access#(
     input                       i_reset,
     input                       i_wr_mem,
     input                       i_is_unsigned,
+    input                       i_mem_to_reg,
     input   [TAM_MASK - 1 : 0]  i_data_mask, 
-    input   [NUM_DIREC - 1 : 0] i_direc_mem,
+    input   [TAM_DATA - 1 : 0] i_direc_mem,
     input   [TAM_DATA - 1 : 0]  i_data,
     input   [NUM_DIREC - 1 : 0] i_debug_pointer,
     output  [TAM_DATA - 1 : 0]  o_debug_read,
     output  [TAM_DATA - 1 : 0]  o_data
 );
 wire    [NUM_BYTES-1 : 0]   bits_de_mascara_a_memoria;
-wire    [TAM_DATA-1 : 0]    dato_de_memoria_a_signador;
+wire    [TAM_DATA-1 : 0]    dato_de_memoria_a_signador, dato_signado;
 
 mask_a_byte mask(
     i_data_mask,
@@ -60,6 +61,15 @@ signador signador(
     i_is_unsigned,
     i_data_mask,
     dato_de_memoria_a_signador, //toma como entrada la salida de la mascarita
+    dato_signado
+);
+
+mux #(
+    .BITS_ENABLES(1),
+    .BUS_SIZE(TAM_DATA)
+    )mux_de_mem_o_reg(
+    i_mem_to_reg,
+    {dato_signado,i_direc_mem},
     o_data
 );
 endmodule

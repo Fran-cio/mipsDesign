@@ -40,7 +40,7 @@ module mod_control #(
         begin        
             casez({i_operation, i_function})
                 12'b1?0?????????:
-                    o_control_data = {14'b01100000110000,i_operation[1],i_operation[0],i_operation[2],1'b0}; 
+                    o_control_data = {14'b11100000110000,i_operation[1],i_operation[0],i_operation[2],1'b0}; 
                 12'b1?1?????????: 
                     o_control_data = {14'b00001000100000,i_operation[1],i_operation[0],i_operation[2],1'b0};
                 12'b0?1?????????:  

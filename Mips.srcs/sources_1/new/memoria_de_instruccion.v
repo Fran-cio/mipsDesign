@@ -49,7 +49,7 @@ integer i;
 // La escritura funciona como una fifo, los datos entran con un puntero interno
 always @(posedge i_clk)
       if (i_reset)
-        reg_write_ptr <= 4;
+        reg_write_ptr <= 0;
       else
         reg_write_ptr <= next_write_ptr;
 
@@ -83,6 +83,6 @@ assign o_intruccion = reg_intruccion;
 
 // is_end nos permite vcerificar si hay instrucciones para ejecutarse
 // Ya no es necesario distinguir si es una halt o lo que sea.
-assign is_end               =    reg_write_ptr+8  <=  i_read_direc_intruccion; 
+assign is_end               =    reg_write_ptr+12  <=  i_read_direc_intruccion; 
 endmodule
 

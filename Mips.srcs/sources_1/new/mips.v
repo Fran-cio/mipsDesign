@@ -104,7 +104,7 @@ wire    [76-1:0]                de_ex_a_mem;
 /*====================================== Memory Access ======================================*/
 wire    [TAM_DATA-1:0]          o_data_salida_de_memoria;
 /*====================================== Latch MEM/WB ======================================*/
-wire    [72-1:0]                de_mem_a_wb;
+wire    [39-1:0]                de_mem_a_wb;
 /*====================================== Write Back ======================================*/
 wire    [TAM_DATA-1:0]          dato_salido_wb;
 wire    [TAM_DIREC_REG-1:0]     direccion_de_wb;
@@ -126,16 +126,25 @@ IF(
 );
 assign o_read_debug_pc  =  pc_value; 
 /*====================================== Latch IF/ID ======================================*/
-
 latch #(
-    .BUS_DATA(TAM_DATA * 2)
+    .BUS_DATA(TAM_DATA)
 )
-if_id_latch(
+if_id_latch_pc_mas_cuatro(
     .i_clock(i_clk),
     .i_reset(i_reset),
     .i_enable(i_latches_en[3] && stall_latch),
-    .i_data({instruction, pc_value}), 
-    .o_data(de_if_a_id)
+    .i_data(pc_value), 
+    .o_data(de_if_a_id[31:0])
+);
+latch #(
+    .BUS_DATA(TAM_DATA)
+)
+if_id_latch_inst(
+    .i_clock(i_clk),
+    .i_reset(i_reset || if_flush),
+    .i_enable(i_latches_en[3] && stall_latch),
+    .i_data(instruction), 
+    .o_data(de_if_a_id[63:32])
 );
 /*====================================== MUXES IF/ID ======================================*/
 
@@ -204,8 +213,9 @@ hazard_unit(
     .i_mem_read_id_ex(de_id_a_ex[4]),
     .i_rs_if_id(o_direccion_rs),
     .i_rt_if_id(o_direccion_rt),
-    .i_rt_id_ex(de_id_a_ex[119 : 115]), 
+    .i_rt_id_ex(de_id_a_ex[114 : 110]), 
     .o_latch_en(stall_latch),
+    .o_if_flush(if_flush),
     .o_is_risky(stall_ctl)
 );
 
@@ -239,12 +249,12 @@ instruction_decode ID(
     // Cortocircuito
     .i_reg_write_id_ex(de_id_a_ex[2]),
     .i_reg_write_ex_mem(de_ex_a_mem[2]),
-    .i_reg_write_mem_wb(de_mem_a_wb[2]),
+    .i_reg_write_mem_wb(de_mem_a_wb[1]),
     .i_direc_rd_id_ex(o_reg_address), 
     .i_direc_rd_ex_mem(de_ex_a_mem[75:71]),     
     .i_direc_rd_mem_wb(direccion_de_wb),     
     .i_dato_de_id_ex(o_alu_data), 
-    .i_dato_de_ex_mem(de_ex_a_mem[38:7]), 
+    .i_dato_de_ex_mem(o_data_salida_de_memoria), 
     .i_dato_de_mem_wb(dato_salido_wb), 
     //Al registro
     .i_dato_de_escritura_en_reg(dato_salido_wb),
@@ -314,7 +324,7 @@ ex_mem_latch(
     i_clk,
     i_reset,
     i_latches_en[1],
-    {o_reg_address, o_mem_data, o_alu_data, de_id_a_ex[6:0]},  
+    {o_reg_address, o_mem_data, o_alu_data, de_id_a_ex[7:5], de_id_a_ex[3:0]},  
     de_ex_a_mem
 );
 
@@ -324,6 +334,7 @@ memory_access MEM(
     .i_reset(i_reset),
     .i_wr_mem(de_ex_a_mem[4]),
     .i_is_unsigned(de_ex_a_mem[3]),
+    .i_mem_to_reg(de_ex_a_mem[1]),
     .i_data_mask(de_ex_a_mem[6:5]), 
     .i_direc_mem(de_ex_a_mem[38:7]),
     .i_data(de_ex_a_mem[70:39]),
@@ -334,24 +345,22 @@ memory_access MEM(
 
 /*====================================== Latch MEM/WB ======================================*/
 latch #(
-    .BUS_DATA(72)
+    .BUS_DATA(39)
 )
 mem_wb_latch(
     i_clk,
     i_reset,
     i_latches_en[0],
-    {de_ex_a_mem[38:7], de_ex_a_mem[75:71], o_data_salida_de_memoria, de_ex_a_mem[2:0]}, 
+    {de_ex_a_mem[75:71], o_data_salida_de_memoria,de_ex_a_mem[2] ,de_ex_a_mem[0]}, 
     de_mem_a_wb
 );
 /*====================================== Write Back ======================================*/
 write_back WB(
-    .i_dato_de_mem(de_mem_a_wb[34:3]),
-    .i_dato_de_reg(de_mem_a_wb[71:40]),
+    .i_dato_de_mem(de_mem_a_wb[33:2]),
         //direcciones
-    .i_direc_reg(de_mem_a_wb[39:35]), 
+    .i_direc_reg(de_mem_a_wb[38:34]), 
         //seniales de control
     .i_j_return_dest(de_mem_a_wb[0]),
-    .i_mem_to_reg(de_mem_a_wb[1]),
         
     .o_dato(dato_salido_wb),
     .o_direccion(direccion_de_wb)

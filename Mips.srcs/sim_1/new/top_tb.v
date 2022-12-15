@@ -598,6 +598,252 @@ module top_tb;
         i_wr=0;
         //srlv  17,10,11
         #DATA_TIME
+        i_wr=1;
+        in = 8'b10100000;  
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00010001;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000000; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000100;    
+        #2
+        i_wr=0;
+        //SH  17,8(0)
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b10100100;  
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00001101;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000000; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00001000;    
+        #2
+        i_wr=0;
+        //SB  13,4(0)
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b10100000;  
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00001101;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000000; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000100;    
+        #2
+        i_wr=0;
+        //SH  13,8(0)
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b10101100;  
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00001101;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000000; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00001100;    
+        #2
+        i_wr=0;
+        //SW  13,12(0)
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b10000000;  
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00010010;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000000; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00001100;    
+        #2
+        i_wr=0;
+        //LB  18,12(0)
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00110010; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b01010011; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00011000;        
+        #2
+        i_wr=0; 
+        i_rd    =1;
+        #1
+        i_rd    =0; 
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b01010110;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        // ANDI 18,19,6230
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b10000100;  
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00010100;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00000000; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00001100;    
+        #2
+        i_wr=0;
+        //LH  20,12(0)
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00110110; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b10010101; 
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b00011000;        
+        #2
+        i_wr=0; 
+        i_rd    =1;
+        #1
+        i_rd    =0; 
+        #DATA_TIME
+        i_wr=1;
+        in = 8'b01010110;
+        #2
+        i_wr=0;
+        i_rd    =1;
+        #1
+        i_rd    =0;
+        // ORI 18,19,6230
+        #DATA_TIME
         i_rd    =1;
         #1
         i_rd    =0;
