@@ -69,1078 +69,136 @@ module top_tb;
         i_reset = 1;
         #2
         i_reset = 0;
-//        i_rd    =0;
-//        i_wr=1;
-//        in = "P";
-//        #2
-//        i_wr=0;
+        #2
+//------------------------------- TEST OPERACIONES_ReI/LOAD/STORE --------------------            
+//        enviar_byte("B");
+//        enviar_intr ({8'b00100000,8'b00000100,8'b00011011,8'b11010011});                                               
+//        // ADDI 4,0,7123
+//        enviar_intr ({8'b00100000,8'b00000011,8'b00000000,8'b01010101});                                               
+//        // ADDI 3,0,85
+//        enviar_intr ({8'b00000000,8'b10000011,8'b00101000,8'b00100001});                                               
+//        //ADDU  4,3,5 
+//        enviar_intr ({8'b00000000,8'b10000011,8'b00110000,8'b00100011});                                               
+//        //subu  4,3,6  
+//        enviar_intr ({8'b00000000,8'b10000011,8'b00111000,8'b00100100});                                    
+//        //and  4,3,7
+//        enviar_intr ({8'b00000000,8'b10000011,8'b01000000,8'b00100101});                                    
+//        //or  4,3,8 
+//        enviar_intr ({8'b00000000,8'b10000011,8'b01001000,8'b00100110});                                  
+//        //xor  4,3,9
+//        enviar_intr ({8'b00000000,8'b10000011,8'b01010000,8'b00100111});                          
+//        //nor  4,3,10
+//        enviar_intr ({8'b00000000,8'b01100100,8'b01011000,8'b00101010});                          
+//        //slt  3,4,11 
+//        enviar_intr ({8'b00000000,8'b00001010,8'b01100000,8'b10000000});                  
+//        //sll  12,10,2 
+//        enviar_intr ({8'b00000000,8'b00001010,8'b01101000,8'b10000010});          
+//        //srl  13,10,2 
+//        enviar_intr ({8'b00000000,8'b00001010,8'b01110000,8'b10000011});  
+//        //sra  14,10,2
+//        enviar_intr ({8'b00000001,8'b01101010,8'b01111000,8'b00000100});  
+//        //sllv  15,10,11
+//        enviar_intr ({8'b00000001,8'b01101010,8'b10000000,8'b00000110});
+//        //srlv  16,10,11
+//        enviar_intr ({8'b00000001,8'b01101010,8'b10001000,8'b00000111});
+//        //srav  17,10,11
+//        enviar_intr ({8'b10100000,8'b00010001,8'b00000000,8'b00000100});                       
+//        //SH  17,8(0)
+//        enviar_intr ({8'b10100100,8'b00001101,8'b00000000,8'b00001000});                     
+//        //SB  13,4(0)
+//        enviar_intr ({8'b10100000,8'b00001101,8'b00000000,8'b00000100});                     
+//        //SH  13,8(0)
+//        enviar_intr ({8'b10101100,8'b00001101,8'b00000000,8'b00001100});             
+//        //SW  13,12(0)
+//        enviar_intr ({8'b10000000,8'b00010010,8'b00000000,8'b00001100});             
+//        //LB  18,12(0)
+//        enviar_intr ({8'b00110010,8'b01010011,8'b00011000,8'b01010110});     
+//        // ANDI 18,19,6230
+//        enviar_intr ({8'b10000100,8'b00010100,8'b00000000,8'b00001100});     
+//        //LH  20,12(0)
+//        enviar_intr ({8'b00110110,8'b10010101,8'b00011000,8'b01010110});     
+//        // ORI 21,20,6230
+//        enviar_intr ({8'b10001100,8'b00010110,8'b00000000,8'b00001100});     
+//        //LW  22,12(0)
+//        enviar_intr ({8'b00111010,8'b11010111,8'b00011000,8'b01010110});     
+//        // XORI 23,22,6230
+//        enviar_intr ({8'b10011100,8'b00011000,8'b00000000,8'b00001100});     
+//        //LWU  24,12(0)
+//        enviar_intr ({8'b00111100,8'b00011001,8'b00011000,8'b01010110});     
+//        // LUI 25,24,6230
+//        enviar_intr ({8'b10010000,8'b00011010,8'b00000000,8'b00001100});     
+//        //  LBU  26,12(0)
+//        enviar_intr ({8'b00101011,8'b01011011,8'b01011000,8'b01010110});     
+//        // SLTI 25,24,22614
+//        enviar_intr ({8'b11111111,8'b0,8'b0,8'b0});
+//        //HALT
+//        enviar_byte("G");
+//        #200
 //        i_rd    =1;
-//        #1
-//        i_rd    =0;
-//        #DATA_TIME
-//        i_wr    =1;
-//        in = "C"; // 255 representado en hexa de N bits
-//        #2
-//        i_wr=0;
-//        i_rd    =1;
-//        #1
-//        i_rd    =0;
-//        #DATA_TIME
-//        i_wr    =1;
-//        in = "R"; // 255 representado en hexa de N bits
-//        #2
-//        i_wr=0;
-//        i_rd    =1;
-//        #1
-//        i_rd    =0;
-//        #DATA_TIME 
-//        i_wr=1;   
-//        in = "T";
-//        #2
-//        i_wr=0;
-//        i_rd    =1;
-//        #1
-//        i_rd    =0;
-//        #DATA_TIME
-//        i_wr=1;
-//        in = "E"; // 2 representado en hexa de N bits;
-//        #2
-//        i_wr=0;
-//        i_rd    =1;
-//        #1
-//        i_rd    =0;
-//        #DATA_TIME
-//        i_wr=1;
-//        in = "M";
-//        #2
-//        i_wr=0;
-//        i_rd    =1;
-//        #1
-//        i_rd    =0;
-//        #DATA_TIME
-//        i_wr=1;
-//        in = ","; // operaci?n 0 representada en un hexa de M bits
-//        #2
-//        i_wr=0;
-//        i_rd    =1;
-//        #1
-//        i_rd    =0;
-//        #DATA_TIME
-//        i_wr=1;
-//        in = "N"; // Addition
-//        #2
-//        i_wr=0;
-//        i_rd    =1;
-//        #1
-//        i_rd    =0;
-        #2
-        i_rd    =0;
-        i_wr=1;
-        in = "B"; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00100000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000100; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00011011;        
-        #2
-        i_wr=0; 
-        i_rd    =1;
-        #1
-        i_rd    =0; 
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b11010011;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        // ADDI 4,0,7123
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00100000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000011;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000000; 
-        #2
-        i_wr=0; 
-        i_rd    =1;
-        #1
-        i_rd    =0;
-         #DATA_TIME
-        i_wr=1;
-        in = 8'b01010101;        
-        #2
-        i_wr=0; 
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        // ADDI 3,0,85         
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b10000011; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00101000;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00100001; 
-        #2
-        i_wr=0;
-        //ADDU  4,3,5    
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000000;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b10000011; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00110000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00100011; 
-        #2
-        i_wr=0;
-        //subu  4,3,6  
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000000;  
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b10000011;  
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00111000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00100100; 
-        #2
-        i_wr=0;
-        //and  4,3,7
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000000;  
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b10000011; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b01000000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00100101;    
-        #2
-        i_wr=0;
-        //or  4,3,8 
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000000;  
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b10000011; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b01001000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00100110;    
-        #2
-        i_wr=0;
-        //xor  4,3,9
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000000;  
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b10000011; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b01010000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00100111;    
-        #2
-        i_wr=0;
-        //nor  4,3,10
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000000;  
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b01100100;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b01011000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00101010;    
-        #2
-        i_wr=0;
-        //slt  3,4,11 
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000000;  
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00001010;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b01100000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b10000000;    
-        #2
-        i_wr=0;
-        //sll  12,10,2 
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000000;  
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00001010;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b01101000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b10000010;    
-        #2
-        i_wr=0;
-        //srl  13,10,2 
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000000;  
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00001010;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b01110000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b10000011;    
-        #2
-        i_wr=0;
-        //sra  14,10,2
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000001;  
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b01101010;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b01111000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000100;    
-        #2
-        i_wr=0;
-        //sllv  15,10,11
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000001;  
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b01101010;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b10000000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000110;    
-        #2
-        i_wr=0;
-        //srlv  16,10,11
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000001;  
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b01101010;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b10001000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000111;    
-        #2
-        i_wr=0;
-        //srlv  17,10,11
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b10100000;  
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00010001;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000100;    
-        #2
-        i_wr=0;
-        //SH  17,8(0)
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b10100100;  
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00001101;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00001000;    
-        #2
-        i_wr=0;
-        //SB  13,4(0)
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b10100000;  
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00001101;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000100;    
-        #2
-        i_wr=0;
-        //SH  13,8(0)
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b10101100;  
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00001101;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00001100;    
-        #2
-        i_wr=0;
-        //SW  13,12(0)
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b10000000;  
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00010010;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00001100;    
-        #2
-        i_wr=0;
-        //LB  18,12(0)
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00110010; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b01010011; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00011000;        
-        #2
-        i_wr=0; 
-        i_rd    =1;
-        #1
-        i_rd    =0; 
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b01010110;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        // ANDI 18,19,6230
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b10000100;  
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00010100;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00001100;    
-        #2
-        i_wr=0;
-        //LH  20,12(0)
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00110110; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b10010101; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00011000;        
-        #2
-        i_wr=0; 
-        i_rd    =1;
-        #1
-        i_rd    =0; 
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b01010110;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        // ORI 21,20,6230
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b10001100;  
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00010110;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00001100;    
-        #2
-        i_wr=0;
-        //LW  22,12(0)
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00111010; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b11010111; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00011000;        
-        #2
-        i_wr=0; 
-        i_rd    =1;
-        #1
-        i_rd    =0; 
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b01010110;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        // XORI 23,22,6230
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b10011100;  
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00011000;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00001100;    
-        #2
-        i_wr=0;
-        //LWU  24,12(0)
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00111100; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00011001; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00011000;        
-        #2
-        i_wr=0; 
-        i_rd    =1;
-        #1
-        i_rd    =0; 
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b01010110;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        // LUI 25,24,6230
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b10010000;  
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00011010;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00000000; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00001100;    
-        #2
-        i_wr=0;
-//        LBU  26,12(0)
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b00101011; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b01011011; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b01011000;        
-        #2
-        i_wr=0; 
-        i_rd    =1;
-        #1
-        i_rd    =0; 
-        #DATA_TIME
-        i_wr=1;
-        in = 8'b01010110;
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        // SLTI 25,24,6230
-        #DATA_TIME
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        in = 8'b11111111;    
-        i_wr=1;
-        #2
-        i_wr=0;
-        #DATA_TIME
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        in = 8'b0;   
-        i_wr=1;
-        #2
-        i_wr=0;
-        #DATA_TIME
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        in = 8'b0; 
-        i_wr=1;
-        #2
-        i_wr=0;
-        #DATA_TIME
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        in = 8'b0; 
-        i_wr=1;
-        #2
-        i_wr=0;
-        #DATA_TIME
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        i_wr=1;
-        in = "G"; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        for (i = 0 ; i < 32 ; i = i + 1)
-        begin
-            i_wr=1;        
-            in = "R";
-            #2
-            i_wr=0;
-            #DATA_TIME
-            i_wr=1;
-            in="T";
-            #2
-            i_wr=0;
-            #DATA_TIME
-            #DATA_TIME
-            #DATA_TIME
-            #DATA_TIME;
-        end
-        for (i = 0 ; i < 4 ; i = i + 1)
-        begin
-            i_wr=1;
-            in = "M";
-            #2
-            i_wr=0;
-            #DATA_TIME
-            i_wr=1;
-            in=",";
-            #2
-            i_wr=0;
-            #DATA_TIME
-            #DATA_TIME
-            #DATA_TIME
-            #DATA_TIME;
-        end
-        #DATA_TIME
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        i_wr=1;
-        in = "P"; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        i_wr=1;
-        in = "C"; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        i_wr=1;
-        in = "F"; 
-        #2
-        i_wr=0;
-        i_rd    =1;
-        #1
-        i_rd    =0;
-        #DATA_TIME      
+//        for (i = 0 ; i < 32 ; i = i + 1)
+//        begin
+//            enviar_byte("R");
+//            enviar_byte("T");
+//            #DATA_TIME
+//            #DATA_TIME;
+//        end
+//        for (i = 0 ; i < 4 ; i = i + 1)
+//        begin
+//            enviar_byte("M");
+//            enviar_byte(",");
+//            #DATA_TIME
+//            #DATA_TIME;
+//        end
+//        enviar_byte("P");
+//        enviar_byte("C");
+//        enviar_byte("F"); 
+//------------------------------- TEST JUMP CONDICIONALES Y NO --------------------    
+        enviar_byte("B"); 
+        enviar_intr ({8'b00001000,8'b0,8'b0,8'd5});//0
+        //J 12
+        enviar_intr ({8'b00100000,8'b00000011,16'd85});//1                                            
+       // ADDI 3,0,85
+        enviar_intr ({32'b0});//2
+        //NOP
+        enviar_intr ({32'b0});//3
+        //NOP    
+        enviar_intr ({32'b0});//4
+        //NOP
+        enviar_intr ({8'b00001100,24'd8});//5
+        //JAL 20
+        enviar_intr ({8'b00100000,8'b00000100,16'd95});//6                                             
+        // ADDI 4,0,95
+        enviar_intr ({32'b0});//7
+        //NOP
+        enviar_intr ({11'b00100000000,5'd5,16'd14}); //8                                              
+        // ADDI 5,0,14
+        enviar_intr ({6'b000000,5'd5,15'b0,6'b001000});//9
+        //JR $t(5)
+        enviar_intr ({11'b00100000000,5'd2,16'd2}); //10                                             
+        // ADDI 2,0,2
+        enviar_intr ({32'b0});//11
+        //NOP
+        enviar_intr ({32'b0});//12
+        //NOP
+        enviar_intr ({32'b0});//13
+        //NOP
+        enviar_intr ({11'b00100000000,5'd6,16'd20}); //14                                             
+        // ADDI 6,0,85
+        enviar_intr ({6'b000000,5'd6,5'b0,5'd30,5'b0,6'b001001});//15
+        //JALR $t(6),$t(30)
+        enviar_intr ({11'b00100000000,5'd1,16'd1}); //16                                             
+        // ADDI 1,0,1
+        enviar_intr ({32'b0});//17
+        //NOP
+        enviar_intr ({32'b0});//18
+        //NOP
+        enviar_intr ({32'b0});//19
+        //NOP
+        enviar_intr ({11'b00100000000,5'd7,16'd4}); //20                                           
+        // ADDI 5,0,85
+        enviar_intr ({8'b01000000,24'b0});//21
+        enviar_byte("G");
+        #200
         $finish;
     end
     
@@ -1148,4 +206,25 @@ module top_tb;
         #1
         i_clk = ~i_clk;
     end
+    
+    task enviar_intr (input [31:0] inst);  
+        begin  
+            enviar_byte(inst[31:24]);  
+            enviar_byte(inst[23:16]);  
+            enviar_byte(inst[15:8]);  
+            enviar_byte(inst[7:0]);  
+        end  
+    endtask  
+
+    task enviar_byte (input [7:0] inst);  
+        begin              
+            i_wr=1;
+            in = inst; 
+            #2
+            i_wr=0;
+            #DATA_TIME;  
+        end  
+    endtask
 endmodule
+
+  

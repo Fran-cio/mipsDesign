@@ -36,8 +36,8 @@ module hazard_unit #(
     output                      o_is_risky
 );
 
-assign  o_is_risky = (i_jmp_brch    ||  i_brch)  
-                                    ||  ((i_mem_read_id_ex) 
+assign  o_is_risky = //(i_jmp_brch    ||  i_brch)  ||
+                                      ((i_mem_read_id_ex) 
                                     &&  (i_rt_id_ex == i_rs_if_id 
                                     ||  i_rt_id_ex == i_rt_if_id)) 
                                 ? 1'b1 

@@ -156,7 +156,7 @@ mux #(
 )
 mux_jmp_brch(
     .i_en(o_signals[JMP_OR_BRCH]),
-    .i_data({o_mux_dir, o_mux_pc_immediate}),
+    .i_data({o_mux_dir << 2 , o_mux_pc_immediate}),
     .o_data(new_pc)
 );
 
@@ -166,7 +166,7 @@ mux #(
 )
 mux_dir(
     .i_en(o_signals[JMP_SRC]),
-    .i_data({{6'b0,o_dato_direc_jump} << 2, o_dato_ra_para_condicion}), 
+    .i_data({{6'b0,o_dato_direc_jump} , o_dato_ra_para_condicion}), 
     .o_data(o_mux_dir)
 );
 
