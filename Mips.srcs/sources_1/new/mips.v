@@ -142,7 +142,7 @@ latch #(
 )
 if_id_latch_inst(
     .i_clock(i_clk),
-    .i_reset(i_reset || if_flush || i_pc_reset),
+    .i_reset(i_reset || (i_latches_en[3] && if_flush) || i_pc_reset),
     .i_enable(i_latches_en[3] && stall_latch),
     .i_data(instruction), 
     .o_data(de_if_a_id[63:32])
@@ -210,7 +210,7 @@ hazard_unit #(
 )
 hazard_unit(
     .i_jmp_brch(o_signals[JMP_OR_BRCH]),
-    .i_brch(o_signals[BRANCH]),
+    .i_brch(enable_mux_pc_immediate),
     .i_mem_read_id_ex(de_id_a_ex[4]),
     .i_rs_if_id(o_direccion_rs),
     .i_rt_if_id(o_direccion_rt),

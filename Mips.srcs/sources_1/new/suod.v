@@ -198,8 +198,7 @@ module suod#(
          end
          next:
          begin
-            if (~i_is_end)
-                enable_latch_next   =   {NUM_LATCH{1'b1}};
+            enable_latch_next       =   {NUM_LATCH{1'b1}};
             state_next              =   idle; 
          end  
          read_reg:
@@ -243,6 +242,7 @@ module suod#(
          begin
             pc_reset_next           =   1;
             flush_programa_next     =   1;
+            programa_cargado_next   =   0;
             state_next              =   idle; 
          end
          read_pc:
@@ -253,21 +253,26 @@ module suod#(
          end
          bootloader:
          begin
-            if(~i_fifo_empty)
-            begin
-                bootload_byte_next  =   i_orden;
-                bootload_write_next =   1;
-                read_enable_reg     =   1;
-                if(instruccion_counter_reg == 0 && i_orden[6]==1)
-                begin
-                    bootload_write_next     =   0; 
-                    programa_cargado_next   =   1;
-                    state_next              =   idle;               
-                end    
-                instruccion_counter_next   =   instruccion_counter_reg + 1;                        
-            end
+            if(programa_cargado_reg)
+                state_next              =   idle;               
             else
-                bootload_write_next =   0;
+            begin
+                if(~i_fifo_empty)
+                begin
+                    bootload_byte_next  =   i_orden;
+                    bootload_write_next =   1;
+                    read_enable_reg     =   1;
+                    if(instruccion_counter_reg == 0 && i_orden[6]==1)
+                    begin
+                        bootload_write_next     =   0; 
+                        programa_cargado_next   =   1;
+                        state_next              =   idle;               
+                    end    
+                    instruccion_counter_next   =   instruccion_counter_reg + 1;                        
+                end
+                else
+                    bootload_write_next =   0;
+            end
          end
          run:
          begin
