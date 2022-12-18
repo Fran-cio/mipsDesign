@@ -42,7 +42,8 @@ module top_tb;
     //Outputs
     reg[BUS_SIZE - 1 : 0] in;
     wire[BUS_SIZE - 1 : 0] out;
-   
+    wire[TAM_DATA - 1 : 0] led;
+
     integer i;
 
     top fpga(
@@ -51,7 +52,9 @@ module top_tb;
         o_test,
         Tx_de_Pc_a_fpga,
         Tx_de_fpga_a_Pc,
-        o_programa_cargado
+        o_programa_cargado,
+        o_programa_no_cargado,
+        led
     );
         
      uart uartPc
@@ -131,25 +134,31 @@ module top_tb;
         enviar_intr ({8'b00101011,8'b01011011,8'b01011000,8'b01010110});     
         // SLTI 25,24,22614
         enviar_intr ({8'b11111111,8'b0,8'b0,8'b0});
-        //HALT
+//        HALT
+        for (i = 0 ; i < 70 ; i = i + 1)
+        begin
+            enviar_byte("S");
+            #DATA_TIME
+            #DATA_TIME;
+        end
 //        enviar_byte("G");
-//        #200
-//        i_rd    =1;
-//        for (i = 0 ; i < 32 ; i = i + 1)
-//        begin
-//            enviar_byte("R");
-//            enviar_byte("T");
-//            #DATA_TIME
-//            #DATA_TIME;
-//        end
-//        for (i = 0 ; i < 4 ; i = i + 1)
-//        begin
-//            enviar_byte("M");
-//            enviar_byte(",");
-//            #DATA_TIME
-//            #DATA_TIME;
-//        end
-//        enviar_byte("P");
+        #200
+        i_rd    =1;
+        for (i = 0 ; i < 32 ; i = i + 1)
+        begin
+            enviar_byte("R");
+            enviar_byte("T");
+            #DATA_TIME
+            #DATA_TIME;
+        end
+        for (i = 0 ; i < 4 ; i = i + 1)
+        begin
+            enviar_byte("M");
+            enviar_byte(",");
+            #DATA_TIME
+            #DATA_TIME;
+        end
+        enviar_byte("P");
 //        enviar_byte("C");
 //        enviar_byte("F"); 
 //------------------------------- TEST JUMP CONDICIONALES Y NO --------------------    
@@ -171,7 +180,7 @@ module top_tb;
 //        enviar_intr ({32'b0});//7
 //        //NOP
 //        enviar_intr ({11'b00100000000,5'd5,16'd14}); //8                                              
-//        // ADDI 5,0,14
+////        // ADDI 5,0,14
 //        enviar_intr ({6'b000000,5'd5,15'b0,6'b001000});//9
 //        //JR $t(5)
 //        enviar_intr ({11'b00100000000,5'd2,16'd2}); //10                                             
@@ -214,13 +223,19 @@ module top_tb;
 //        // ADDI 8,0,8
 //        enviar_intr ({8'b01000000,24'b0});//21
 //        //HALT
-        for (i = 0 ; i < 36 ; i = i + 1)
-        begin
-            enviar_byte("S");
-            #DATA_TIME
-            #DATA_TIME;
-        end
-//        enviar_byte("G");
+//        for (i = 0 ; i < 70 ; i = i + 1)
+//        begin
+//            enviar_byte("S");
+//            #DATA_TIME
+//            #DATA_TIME;
+//        end
+////        enviar_byte("G");
+
+//        enviar_byte("R");
+//        enviar_byte("M");
+//        enviar_byte("P");
+
+        #DATA_TIME
         #DATA_TIME
 
         $finish;

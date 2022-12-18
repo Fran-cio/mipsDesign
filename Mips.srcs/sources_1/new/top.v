@@ -37,7 +37,9 @@ module top#(
         input   i_Rx,
         output  o_Tx,
         output  o_programa_cargado,
-        output  o_programa_no_cargado
+        output  o_programa_no_cargado,
+        output  o_programa_terminado,        
+        output  [TAM_DATA - 1 : 0]  o_leds  
 
     );
     
@@ -97,7 +99,8 @@ module top#(
             enable_write_de_suod_a_bootloader,
             byte_de_suod_a_bootloader,
             o_programa_cargado,
-            o_programa_no_cargado     
+            o_programa_no_cargado,
+            o_leds     
         );       
      
      separador_bytes separadorDeBytes(
@@ -115,5 +118,7 @@ module top#(
        .tx_full(), .rx_empty(fifo_vacia_de_uart_a_suod),
        .r_data(orden_de_uart_a_suod), .tx(o_Tx)
        );  
-    assign  o_test  =   i_test;
+    assign  o_test                  =   i_test;
+    assign  o_programa_terminado    =   is_end_de_mips_a_suod;
+
 endmodule

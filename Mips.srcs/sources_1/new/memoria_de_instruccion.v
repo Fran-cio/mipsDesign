@@ -22,7 +22,7 @@
 
 module memoria_de_instruccion#(
     parameter NUM_BITS = 32,
-    parameter NUM_REGS  = 32*4, //Medio mucho para mi esta cantidad, pero bueno
+    parameter NUM_REGS  = 64*4, //Medio mucho para mi esta cantidad, pero bueno
     parameter TAM_DIREC = $clog2(NUM_REGS),
     parameter BITS_EN_BYTE = 8
 
@@ -83,6 +83,7 @@ assign o_intruccion = reg_intruccion;
 
 // is_end nos permite vcerificar si hay instrucciones para ejecutarse
 // Ya no es necesario distinguir si es una halt o lo que sea.
-assign is_end               =    reg_write_ptr+4  <=  i_read_direc_intruccion; 
+assign is_end               =   (reg_write_ptr+12  <=  i_read_direc_intruccion)
+                                || ({TAM_DIREC{1'b1}}-3  ==  i_read_direc_intruccion); 
 endmodule
 

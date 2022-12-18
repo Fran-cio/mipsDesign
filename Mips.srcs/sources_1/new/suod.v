@@ -52,8 +52,11 @@ module suod#(
     
     output                      o_bootload_write,
     output   [TAM_ORDEN-1:0]    o_bootload_byte,
+    
     output                      o_programa_cargado,
-    output                      o_programa_no_cargado
+    output                      o_programa_no_cargado,
+    output  [TAM_DATA - 1 : 0]  o_leds  
+
 
    );
     
@@ -71,7 +74,7 @@ module suod#(
       reset_pc      =   4'b1001,
       bootloader    =   4'b1010,
       run           =   4'b1011,
-      flush_prog   =   4'b1100;
+      flush_prog    =   4'b1100;
 
       
    reg  [3:0]               state_reg, state_next;
@@ -93,6 +96,7 @@ module suod#(
    reg                      read_enable_reg;
    reg                      programa_cargado_reg,   programa_cargado_next;
    reg  [1:0]               instruccion_counter_reg, instruccion_counter_next;
+   reg  [TAM_DATA-1:0]      led_reg, led_next;
 
    // body
    // FSMD state & data registers
@@ -115,7 +119,10 @@ module suod#(
             instruccion_counter_reg <=  0;
             bootload_write_reg      <=  0;
             bootload_byte_reg       <=  0;
+            
             programa_cargado_reg    <=  0;
+            led_reg                 <=  0;
+
          end
       else
          begin
@@ -137,6 +144,7 @@ module suod#(
             bootload_byte_reg       <= bootload_byte_next;
             
             programa_cargado_reg    <=  programa_cargado_next;
+            led_reg                 <=  led_next;
 
          end
 
@@ -161,6 +169,7 @@ module suod#(
         bootload_byte_next      =   bootload_byte_reg;   
         
         programa_cargado_next   =   programa_cargado_reg;
+        led_next                =   led_reg;
 
         
         read_enable_reg         =   0;
@@ -198,13 +207,15 @@ module suod#(
          end
          next:
          begin
-            enable_latch_next       =   {NUM_LATCH{1'b1}};
+            if(~i_is_end)
+                enable_latch_next       =   {NUM_LATCH{1'b1}};
             state_next              =   idle; 
          end  
          read_reg:
          begin
             enable_enviada_data_next    =   1;
             data_enviada_next           =   i_debug_read_reg;
+            led_next                    =   i_debug_read_reg;
             state_next                  =   idle; 
          end
          inc_point_reg:
@@ -221,6 +232,7 @@ module suod#(
          begin
             enable_enviada_data_next    =   1;
             data_enviada_next           =   i_debug_read_mem;
+            led_next                    =   i_debug_read_mem;
             state_next                  =   idle; 
          end
          inc_point_mem:
@@ -249,6 +261,7 @@ module suod#(
          begin
             enable_enviada_data_next    =   1;
             data_enviada_next           =   i_read_pc;
+            led_next                    =   i_read_pc;
             state_next                  =   idle; 
          end
          bootloader:
@@ -260,6 +273,8 @@ module suod#(
                 if(~i_fifo_empty)
                 begin
                     bootload_byte_next  =   i_orden;
+                    led_next            =   i_orden;
+
                     bootload_write_next =   1;
                     read_enable_reg     =   1;
                     if(instruccion_counter_reg == 0 && i_orden[6]==1)
@@ -279,10 +294,11 @@ module suod#(
             if (~i_is_end)
                 enable_latch_next       =   {NUM_LATCH{1'b1}};
             else
-                if(enable_latch_reg)
-                    enable_latch_next   =   enable_latch_reg>>1;
-                else
-                    state_next          =   idle;               
+                state_next          =   idle;               
+
+//                if(enable_latch_reg)
+//                    enable_latch_next   =   enable_latch_reg>>1;
+//                else
          end   
          
       endcase
@@ -307,5 +323,6 @@ module suod#(
     
     assign  o_programa_cargado      =   programa_cargado_reg;
     assign  o_programa_no_cargado   =   ~programa_cargado_reg;
-    
+    assign  o_leds                  =   led_reg;
+
 endmodule
