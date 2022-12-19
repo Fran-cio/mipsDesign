@@ -19,3 +19,6 @@
 !*.srcs/**/*.v
 !*.pdf
 !.img/*
+!*.py
+!*.hex
+!*.asm

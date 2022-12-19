@@ -1,0 +1,7 @@
+LW R4, -176(R0)
+LW R3, 177(R0)
+SW R1, 252(R0)
+SLL R0, R0, R0
+JR r3
+jalr 3, 2
+halt
