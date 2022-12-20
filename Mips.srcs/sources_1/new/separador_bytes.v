@@ -28,7 +28,7 @@ module separador_bytes#(
     input   [TAM_DATA-1:0]          i_palabra_data_enviada,
     input                           i_enable_enviada_data,
     
-    output  [BITS_X_BYTE-1:0]       o_byte_data_enviada,
+    output  [8-1:0]                 o_byte_data_enviada,
     output                          o_write_fifo_enable
    );
    localparam BYTES_X_PALABRA = 4;

@@ -51,14 +51,14 @@ reg[TAM_FUNC : 0] reg_alu_func; //tiene un bit extra para el carry
 always @(*)
 begin
     case (i_alu_op)
-        EXE_ALUOP_ADD      :  reg_alu_func =      ADD;
-        EXE_ALUOP_AND      :  reg_alu_func =      AND;
-        EXE_ALUOP_OR       :  reg_alu_func =       OR;
-        EXE_ALUOP_XOR      :  reg_alu_func =      XOR;
-        EXE_ALUOP_SHIFTLUI :  reg_alu_func = SHIFTLUI;
-        EXE_ALUOP_SLTI     :  reg_alu_func =      SLT;
-        default         :  reg_alu_func = i_func;
-    endcase;
+        EXE_ALUOP_ADD       :  reg_alu_func =   ADD;
+        EXE_ALUOP_AND       :  reg_alu_func =   AND;
+        EXE_ALUOP_OR        :  reg_alu_func =   OR;
+        EXE_ALUOP_XOR       :  reg_alu_func =   XOR;
+        EXE_ALUOP_SHIFTLUI  :  reg_alu_func =   SHIFTLUI;
+        EXE_ALUOP_SLTI      :  reg_alu_func =   SLT;
+        default             :  reg_alu_func =   i_func;
+    endcase
 end
 
 assign o_alu_func = reg_alu_func;

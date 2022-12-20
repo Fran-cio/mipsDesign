@@ -24,7 +24,9 @@ module suod#(
      parameter NUM_LATCH = 5,     
                TAM_ORDEN = 8,  
                TAM_DATA  = 32,
-               TAM_DIREC_REG = 5
+               TAM_DIREC_REG = 5,
+               TAM_DIREC_MEM = 7
+
    )
    (
     input                       i_clk, i_reset, i_is_end,
@@ -39,16 +41,23 @@ module suod#(
     output  [TAM_DIREC_REG-1:0] o_debug_direcc_reg,
     // Lectura en memoria
     input   [TAM_DATA-1:0]      i_debug_read_mem,
-    output  [TAM_DIREC_REG-1:0] o_debug_direcc_mem,
+    output  [TAM_DIREC_MEM-1:0] o_debug_direcc_mem,
     // interaccion con el pc
-    input   [TAM_DATA-1:0]      i_read_pc,
-    output                      o_pc_reset,
+    input   [TAM_DATA-1:0]          i_read_pc,
+    output                          o_pc_reset,
+    output                          o_borrar_programa,
     // Escritura de la memoria de boot
-    input                       i_fifo_empty,
-    output                      o_read_enable,
+    input                           i_fifo_empty,
+    output                          o_read_enable,
     
-    output                      o_bootload_write,
-    output   [TAM_ORDEN-1:0]    o_bootload_byte
+    output                          o_bootload_write,
+    output   [TAM_ORDEN-1:0]        o_bootload_byte,
+    
+    output                          o_programa_cargado,
+    output                          o_programa_no_cargado,
+    output  [TAM_DATA/2 - 1 : 0]    o_leds  
+
+
    );
     
    // symbolic state declaration
@@ -64,7 +73,9 @@ module suod#(
       read_pc       =   4'b1000,
       reset_pc      =   4'b1001,
       bootloader    =   4'b1010,
-      run           =   4'b1011;
+      run           =   4'b1011,
+      flush_prog    =   4'b1100;
+
       
    reg  [3:0]               state_reg, state_next;
    
@@ -78,19 +89,20 @@ module suod#(
    reg  [TAM_DIREC_REG-1:0] debug_direcc_mem_reg, debug_direcc_mem_next;
    
    reg                      pc_reset_reg, pc_reset_next;
+   reg                      flush_programa_reg, flush_programa_next;
 
    reg                      bootload_write_reg, bootload_write_next;
    reg  [TAM_ORDEN-1:0]     bootload_byte_reg, bootload_byte_next;
    reg                      read_enable_reg;
-
-   reg  [1:0]                instruccion_counter;
+   reg                      programa_cargado_reg,   programa_cargado_next;
+   reg  [1:0]               instruccion_counter_reg, instruccion_counter_next;
+   reg  [TAM_DATA/2-1:0]      led_reg, led_next;
 
    // body
    // FSMD state & data registers
    always @(posedge i_clk)
       if (i_reset)
          begin      
-            instruccion_counter     <=  0;
             state_reg               <=  idle;
             enable_latch_reg        <=  0;
             enable_enviada_data_reg <=  0;
@@ -99,13 +111,18 @@ module suod#(
    
             debug_direcc_reg_reg    <=  1;
    
-            debug_direcc_mem_reg    <=  1;
+            debug_direcc_mem_reg    <=  4;
    
             pc_reset_reg            <=  0;
+            flush_programa_reg      <=  0;
 
+            instruccion_counter_reg <=  0;
             bootload_write_reg      <=  0;
             bootload_byte_reg       <=  0;
-            read_enable_reg         <=  0;
+            
+            programa_cargado_reg    <=  0;
+            led_reg                 <=  0;
+
          end
       else
          begin
@@ -119,9 +136,16 @@ module suod#(
             debug_direcc_mem_reg    <= debug_direcc_mem_next;
    
             pc_reset_reg            <= pc_reset_next;
+            flush_programa_reg      <= flush_programa_next;
 
+
+            instruccion_counter_reg <= instruccion_counter_next;
             bootload_write_reg      <= bootload_write_next;
             bootload_byte_reg       <= bootload_byte_next;
+            
+            programa_cargado_reg    <=  programa_cargado_next;
+            led_reg                 <=  led_next;
+
          end
 
    // FSMD next-state logic
@@ -137,9 +161,16 @@ module suod#(
         debug_direcc_mem_next   =   debug_direcc_mem_reg;
         
         pc_reset_next           =   pc_reset_reg;
+        flush_programa_next     =   flush_programa_reg;
+
         
+        instruccion_counter_next=   instruccion_counter_reg;
         bootload_write_next     =   bootload_write_reg;
         bootload_byte_next      =   bootload_byte_reg;   
+        
+        programa_cargado_next   =   programa_cargado_reg;
+        led_next                =   led_reg;
+
         
         read_enable_reg         =   0;
         
@@ -152,6 +183,9 @@ module suod#(
             enable_enviada_data_next    =   0;
             pc_reset_next               =   0;
             bootload_write_next         =   0;
+            instruccion_counter_next    =   0;
+            flush_programa_next         =   0;
+            
             if(~i_fifo_empty)
             begin
                 case(i_orden)
@@ -163,6 +197,7 @@ module suod#(
                     "M":state_next = read_mem;
                     "N":state_next = dec_point_mem;
                     "C":state_next = reset_pc;
+                    "F":state_next = flush_prog;
                     "P":state_next = read_pc;
                     "B":state_next = bootloader;
                     "G":state_next = run;
@@ -172,40 +207,61 @@ module suod#(
          end
          next:
          begin
-            if (~i_is_end)
-                enable_latch_next   =   {NUM_LATCH{1'b1}};
+            if(~i_is_end)
+                enable_latch_next       =   {NUM_LATCH{1'b1}};
             state_next              =   idle; 
          end  
          read_reg:
          begin
             enable_enviada_data_next    =   1;
             data_enviada_next           =   i_debug_read_reg;
+            led_next                    =   i_debug_read_reg;
             state_next                  =   idle; 
          end
          inc_point_reg:
          begin
+            enable_enviada_data_next    =   1;
+        
             debug_direcc_reg_next   =   debug_direcc_reg_reg +  1;
+            data_enviada_next       =   debug_direcc_reg_reg +  1;
+            led_next                =   debug_direcc_reg_reg +  1;
+
             state_next              =   idle; 
          end
          dec_point_reg:
-         begin
+         begin            
+            enable_enviada_data_next    =   1;
+
             debug_direcc_reg_next   =   debug_direcc_reg_reg -  1;
+            data_enviada_next       =   debug_direcc_reg_reg -  1;
+            led_next                =   debug_direcc_reg_reg -  1;
+
             state_next              =   idle; 
          end
          read_mem:
          begin
             enable_enviada_data_next    =   1;
+            
             data_enviada_next           =   i_debug_read_mem;
+            led_next                    =   i_debug_read_mem;
             state_next                  =   idle; 
          end
          inc_point_mem:
-         begin
-            debug_direcc_mem_next   =   debug_direcc_mem_reg + 1;
+         begin            
+            enable_enviada_data_next    =   1;
+
+            debug_direcc_mem_next   =   debug_direcc_mem_reg + 4;
+            data_enviada_next       =   debug_direcc_mem_reg + 4;
+            led_next                =   debug_direcc_mem_reg + 4;            
             state_next              =   idle; 
          end
          dec_point_mem:
-         begin
-            debug_direcc_mem_next   =   debug_direcc_mem_reg - 1;
+         begin 
+            enable_enviada_data_next    =   1;
+
+            debug_direcc_mem_next   =   debug_direcc_mem_reg - 4;
+            data_enviada_next       =   debug_direcc_mem_reg - 4;
+            led_next                =   debug_direcc_mem_reg - 4;              
             state_next              =   idle; 
          end
          reset_pc:
@@ -213,38 +269,55 @@ module suod#(
             pc_reset_next = 1;
             state_next    = idle; 
          end
+         flush_prog:
+         begin
+            pc_reset_next           =   1;
+            flush_programa_next     =   1;
+            programa_cargado_next   =   0;
+            state_next              =   idle; 
+         end
          read_pc:
          begin
             enable_enviada_data_next    =   1;
             data_enviada_next           =   i_read_pc;
+            led_next                    =   i_read_pc;
             state_next                  =   idle; 
          end
          bootloader:
          begin
-            if(~i_fifo_empty)
-            begin
-                bootload_byte_next  =   i_orden;
-                bootload_write_next =   1;
-                read_enable_reg     =   1;
-                if(instruccion_counter == 0 && i_orden[6]==1)
-                begin
-                    bootload_write_next =   0; 
-                    state_next          =   idle;               
-                end    
-                instruccion_counter =   instruccion_counter + 1;                        
-            end
+            if(programa_cargado_reg)
+                state_next              =   idle;               
             else
-                bootload_write_next =   0;
+            begin
+                if(~i_fifo_empty)
+                begin
+                    bootload_byte_next  =   i_orden;
+                    led_next            =   i_orden;
+
+                    bootload_write_next =   1;
+                    read_enable_reg     =   1;
+                    if(instruccion_counter_reg == 0 && i_orden[6]==1)
+                    begin
+                        bootload_write_next     =   0; 
+                        programa_cargado_next   =   1;
+                        state_next              =   idle;               
+                    end    
+                    instruccion_counter_next   =   instruccion_counter_reg + 1;                        
+                end
+                else
+                    bootload_write_next =   0;
+            end
          end
          run:
          begin
             if (~i_is_end)
                 enable_latch_next       =   {NUM_LATCH{1'b1}};
             else
-                if(enable_latch_reg)
-                    enable_latch_next   =   enable_latch_reg>>1;
-                else
-                    state_next          =   idle;               
+                state_next          =   idle;               
+
+//                if(enable_latch_reg)
+//                    enable_latch_next   =   enable_latch_reg>>1;
+//                else
          end   
          
       endcase
@@ -261,7 +334,14 @@ module suod#(
     assign  o_debug_direcc_mem      =   debug_direcc_mem_reg;
     // interaccion con el pc
     assign  o_pc_reset              =   pc_reset_reg;
+    assign  o_borrar_programa       =   flush_programa_reg;
+
     // Escritura de la memoria de boot
     assign  o_bootload_write        =   bootload_write_reg;
     assign  o_bootload_byte         =   bootload_byte_reg;
+    
+    assign  o_programa_cargado      =   programa_cargado_reg;
+    assign  o_programa_no_cargado   =   ~programa_cargado_reg;
+    assign  o_leds                  =   led_reg;
+
 endmodule

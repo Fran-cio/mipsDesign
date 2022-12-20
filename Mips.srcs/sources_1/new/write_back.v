@@ -26,25 +26,17 @@ module write_back#(
     )(
     //datos
     input   [TAM_DATA - 1 : 0]      i_dato_de_mem,
-    input   [TAM_DATA - 1 : 0]      i_dato_de_reg,
     //direcciones
     input   [TAM_DIREC_REG - 1 : 0] i_direc_reg, 
     //seniales de control
     input                           i_j_return_dest,
-    input                           i_mem_to_reg,
     
     output  [TAM_DATA - 1 : 0]      o_dato,
     output  [TAM_DIREC_REG - 1 : 0] o_direccion
     );
     
-    mux #(
-        .BITS_ENABLES(1),
-        .BUS_SIZE(TAM_DATA)
-    )mux_de_mem_o_reg(
-        i_mem_to_reg,
-        {i_dato_de_reg,i_dato_de_mem},
-        o_dato
-    ); 
+     
+    assign  o_dato  =   i_dato_de_mem;
     
      mux #(
         .BITS_ENABLES(1),

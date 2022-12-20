@@ -7,19 +7,19 @@ module register_file
     parameter TAM_DIREC = $clog2(NUM_REGS)
  )
  (
-    input  wire                      i_clk,
-    input  wire                      i_reset,
-    input  wire                      i_write_enable,
-    input  wire [ NUM_BITS-1 : 0]     i_data,
-    input  wire [TAM_DIREC-1 : 0]     i_write_direc,
-    input  wire [TAM_DIREC-1 : 0]     i_read_direc_A,
-    input  wire [TAM_DIREC-1 : 0]     i_read_direc_B,
+    input  wire                     i_clk,
+    input  wire                     i_reset,
+    input  wire                     i_write_enable,
+    input  wire [ NUM_BITS-1 : 0]   i_data,
+    input  wire [TAM_DIREC-1 : 0]   i_write_direc,
+    input  wire [TAM_DIREC-1 : 0]   i_read_direc_A,
+    input  wire [TAM_DIREC-1 : 0]   i_read_direc_B,
 
-    input  wire [TAM_DIREC-1 : 0]     i_read_direc_debug,
-    output wire [NUM_BITS - 1 : 0]    o_data_debug,
+    input  wire [TAM_DIREC-1 : 0]   i_read_direc_debug,
+    output wire [NUM_BITS - 1 : 0]  o_data_debug,
 
-    output wire [NUM_BITS-1 : 0]     o_data_A,
-    output wire [NUM_BITS-1 : 0]     o_data_B
+    output wire [NUM_BITS-1 : 0]    o_data_A,
+    output wire [NUM_BITS-1 : 0]    o_data_B
  );
 
 

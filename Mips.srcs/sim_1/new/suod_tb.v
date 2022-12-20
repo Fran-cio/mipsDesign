@@ -31,18 +31,8 @@ module suod_tb;
     localparam TAM_DATA = 32;    
     localparam BUS_BIT_ENABLE = 3;
     localparam I_CLK = 1'b0;
-    localparam I_EN = 3'b000;
-    localparam I_DATA_A = 8'hFF; // 255 representado en hexa de N bits    
-    localparam I_DATA_B = 8'h02; // 2 representado en hexa de N bits    
-    localparam I_OPERATION = 6'h0; // operaci?n 0 representada en un hexa de M bits
-    localparam OP_ADD = 6'b100000;
-    localparam OP_SUB = 6'b100010;
-    localparam OP_AND = 6'b100100;
-    localparam OP_OR = 6'b100101;
-    localparam OP_XOR = 6'b100110;
-    localparam OP_SRA = 6'b000011;
-    localparam OP_SRL = 6'b000010;
-    localparam OP_NOR = 6'b100111;
+
+
 //Inputs
     reg i_clk;
     reg i_reset;
