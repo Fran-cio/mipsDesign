@@ -39,7 +39,7 @@ module top#(
         output  o_programa_cargado,
         output  o_programa_no_cargado,
         output  o_programa_terminado,        
-        output  [TAM_DATA - 1 : 0]  o_leds  
+        output  [TAM_DATA/2 - 1 : 0]  o_leds  
 
     );
     

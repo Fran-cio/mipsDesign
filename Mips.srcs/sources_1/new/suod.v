@@ -43,19 +43,19 @@ module suod#(
     input   [TAM_DATA-1:0]      i_debug_read_mem,
     output  [TAM_DIREC_MEM-1:0] o_debug_direcc_mem,
     // interaccion con el pc
-    input   [TAM_DATA-1:0]      i_read_pc,
-    output                      o_pc_reset,
-    output                      o_borrar_programa,
+    input   [TAM_DATA-1:0]          i_read_pc,
+    output                          o_pc_reset,
+    output                          o_borrar_programa,
     // Escritura de la memoria de boot
-    input                       i_fifo_empty,
-    output                      o_read_enable,
+    input                           i_fifo_empty,
+    output                          o_read_enable,
     
-    output                      o_bootload_write,
-    output   [TAM_ORDEN-1:0]    o_bootload_byte,
+    output                          o_bootload_write,
+    output   [TAM_ORDEN-1:0]        o_bootload_byte,
     
-    output                      o_programa_cargado,
-    output                      o_programa_no_cargado,
-    output  [TAM_DATA - 1 : 0]  o_leds  
+    output                          o_programa_cargado,
+    output                          o_programa_no_cargado,
+    output  [TAM_DATA/2 - 1 : 0]    o_leds  
 
 
    );
@@ -96,7 +96,7 @@ module suod#(
    reg                      read_enable_reg;
    reg                      programa_cargado_reg,   programa_cargado_next;
    reg  [1:0]               instruccion_counter_reg, instruccion_counter_next;
-   reg  [TAM_DATA-1:0]      led_reg, led_next;
+   reg  [TAM_DATA/2-1:0]      led_reg, led_next;
 
    // body
    // FSMD state & data registers
@@ -220,29 +220,48 @@ module suod#(
          end
          inc_point_reg:
          begin
+            enable_enviada_data_next    =   1;
+        
             debug_direcc_reg_next   =   debug_direcc_reg_reg +  1;
+            data_enviada_next       =   debug_direcc_reg_reg +  1;
+            led_next                =   debug_direcc_reg_reg +  1;
+
             state_next              =   idle; 
          end
          dec_point_reg:
-         begin
+         begin            
+            enable_enviada_data_next    =   1;
+
             debug_direcc_reg_next   =   debug_direcc_reg_reg -  1;
+            data_enviada_next       =   debug_direcc_reg_reg -  1;
+            led_next                =   debug_direcc_reg_reg -  1;
+
             state_next              =   idle; 
          end
          read_mem:
          begin
             enable_enviada_data_next    =   1;
+            
             data_enviada_next           =   i_debug_read_mem;
             led_next                    =   i_debug_read_mem;
             state_next                  =   idle; 
          end
          inc_point_mem:
-         begin
+         begin            
+            enable_enviada_data_next    =   1;
+
             debug_direcc_mem_next   =   debug_direcc_mem_reg + 4;
+            data_enviada_next       =   debug_direcc_mem_reg + 4;
+            led_next                =   debug_direcc_mem_reg + 4;            
             state_next              =   idle; 
          end
          dec_point_mem:
-         begin
+         begin 
+            enable_enviada_data_next    =   1;
+
             debug_direcc_mem_next   =   debug_direcc_mem_reg - 4;
+            data_enviada_next       =   debug_direcc_mem_reg - 4;
+            led_next                =   debug_direcc_mem_reg - 4;              
             state_next              =   idle; 
          end
          reset_pc:

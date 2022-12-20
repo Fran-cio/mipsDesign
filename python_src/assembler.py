@@ -215,7 +215,10 @@ class Assembler:
 
         elif i_name == "HALT":
             inst_bin = "01000000000000000000000000000000"
+        elif i_name == "NOP":
+            inst_bin = inst_bin
         else:
+            print(i_name)
             log.FATAL(f'Instruccion no reconocida {i_name}')
 
         return inst_bin
@@ -263,8 +266,12 @@ finally:
 for inst in asm_tokens:
     binary_code += (asm.instruction_generator(inst))
 
+num_byte = []
+for i in range(int(len(binary_code)/8)):
+    num =   int(binary_code[i*8:(i+1)*8],2)
+    num_byte.append(num)
 try:
-    out_file = open("./output_code.hex", "w")
-    out_file.write(binary_code)
+    out_file = open("./output_code.hex", "wb")
+    out_file.write((''.join(chr(i) for i in num_byte)).encode('charmap'))
 finally:
     out_file.close()
