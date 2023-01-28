@@ -57,8 +57,18 @@ module top#(
     wire    [TAM_DATA - 1 : 0]      palabra_de_suod_a_separador;
     wire    [TAM_BYTE - 1 : 0]      orden_de_uart_a_suod;
     
+   clk_wiz_0 clk_wiz
+   (
+    // Clock out ports
+    .clk_out64MHz(clk_out64MHz),     // output clk_out25MHz
+    // Status and control signals
+    .reset(i_reset), // input reset
+    .locked(locked),       // output locked
+   // Clock in ports
+    .clk_in1(i_clk));      // input clk_in1
+  
     mips MIPS(
-        i_clk,
+        clk_out64MHz,
         i_reset,
         enable_write_de_suod_a_bootloader,
         pc_reset_de_mips_a_suod,
@@ -77,7 +87,7 @@ module top#(
     
     // Verilog code for ALU
     suod suod1(
-            i_clk, i_reset, is_end_de_mips_a_suod,
+            clk_out64MHz, i_reset, is_end_de_mips_a_suod,
             orden_de_uart_a_suod,
             enable_de_suod_a_sepador,
             palabra_de_suod_a_separador,
@@ -104,7 +114,7 @@ module top#(
         );       
      
      separador_bytes separadorDeBytes(
-        i_clk, i_reset,
+        clk_out64MHz, i_reset,
         palabra_de_suod_a_separador,
         enable_de_suod_a_sepador,
     
@@ -113,7 +123,7 @@ module top#(
      );
      
      uart uartSuod
-      (.clk(i_clk), .reset(i_reset), .rd_uart(read_enable_de_suod_a_uart),
+      (.clk(clk_out64MHz), .reset(i_reset), .rd_uart(read_enable_de_suod_a_uart),
        .wr_uart(enable_de_sepador_a_uart), .rx(i_Rx), .w_data(byte_de_separador_a_uart),
        .tx_full(), .rx_empty(fifo_vacia_de_uart_a_suod),
        .r_data(orden_de_uart_a_suod), .tx(o_Tx)

@@ -1,5 +1,3 @@
-set_property -dict { PACKAGE_PIN E3    IOSTANDARD LVCMOS33 } [get_ports { i_clk }]; #IO_L12P_T1_MRCC_35 Sch=clk100mhz
-create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports {i_clk}];
 set_property IOSTANDARD LVCMOS33 [get_ports {o_leds[15]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {o_leds[14]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {o_leds[13]}]
@@ -47,7 +45,9 @@ set_property PACKAGE_PIN R12 [get_ports o_programa_terminado]
 set_property PACKAGE_PIN M16 [get_ports o_test]
 set_property PACKAGE_PIN D4 [get_ports o_Tx]
 set_property PACKAGE_PIN C4 [get_ports i_Rx]
-set_property PACKAGE_PIN E3 [get_ports i_clk]
 
 
 set_property PACKAGE_PIN V11 [get_ports {o_leds[15]}]
+
+set_property IOSTANDARD LVCMOS33 [get_ports i_clk]
+set_property PACKAGE_PIN E3 [get_ports i_clk]
