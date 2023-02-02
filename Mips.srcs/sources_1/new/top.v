@@ -122,7 +122,10 @@ module top#(
         enable_de_sepador_a_uart
      );
      
-     uart uartSuod
+     uart#(
+        .DVSR(417),
+        .DVSR_BIT(9)
+       )uartSuod
       (.clk(clk_out64MHz), .reset(i_reset), .rd_uart(read_enable_de_suod_a_uart),
        .wr_uart(enable_de_sepador_a_uart), .rx(i_Rx), .w_data(byte_de_separador_a_uart),
        .tx_full(), .rx_empty(fifo_vacia_de_uart_a_suod),
