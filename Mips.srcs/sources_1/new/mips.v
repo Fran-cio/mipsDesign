@@ -134,7 +134,7 @@ if_id_latch_pc_mas_cuatro(
     .i_clock(i_clk),
     .i_reset(i_reset || i_pc_reset),
     .i_enable(i_latches_en[3] && stall_latch),
-    .i_data(pc_value), 
+    .i_data(pc_suma_result), 
     .o_data(de_if_a_id[31:0])
 );
 latch #(
@@ -156,7 +156,7 @@ mux #(
 )
 mux_jmp_brch(
     .i_en(o_signals[JMP_OR_BRCH]),
-    .i_data({o_mux_dir << 2 , o_mux_pc_immediate}),
+    .i_data({o_mux_dir, o_mux_pc_immediate}),
     .o_data(new_pc)
 );
 
@@ -166,7 +166,7 @@ mux #(
 )
 mux_dir(
     .i_en(o_signals[JMP_SRC]),
-    .i_data({{6'b0,o_dato_direc_jump} , o_dato_ra_para_condicion}), 
+    .i_data({{6'b0,o_dato_direc_jump} << 2 , o_dato_ra_para_condicion}), 
     .o_data(o_mux_dir)
 );
 
@@ -198,7 +198,7 @@ sumador #(
     .TAM_DATO(TAM_DATA)
 )
 sum_if(
-    .i_a(pc_value), 
+    .i_a(pc_suma_result), 
     .i_b(o_dato_direc_branch<<2), 
     .o_result(immediate_suma_result)
 );

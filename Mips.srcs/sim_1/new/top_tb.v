@@ -210,9 +210,9 @@ module top_tb;
         // ADDI 8,8,1
         enviar_intr ({6'b101011,5'd8,5'd7,16'b0}); 
         //Sw    8,7,0
-        enviar_intr ({6'b000101,5'd8,5'd7,16'hFFFD}); 
+        enviar_intr ({6'b000101,5'd8,5'd7,16'hFFFC}); 
         // BNE 8,7,-2
-        enviar_intr ({6'b000100,5'd8,5'd7,16'd2}); 
+        enviar_intr ({6'b000100,5'd8,5'd7,16'd1}); 
         // BEQ 8,7,2
         enviar_intr ({11'b00100000000,5'd9,16'd2}); //20  
         // ADDI 9,0,8
@@ -222,6 +222,42 @@ module top_tb;
         // ADDI 11,0,8
         enviar_intr ({8'b01000000,24'b0});//21
         //HALT
+        ////------------------------------- TEST JUMP RETURN --------------------    
+//        enviar_byte("B"); 
+//        enviar_intr ({8'b00100000,8'b00000011,16'd4});//0                                          
+//        // ADDI 3,0,85
+//        enviar_intr ({8'b00001100,8'b0,8'b0,8'd14});//1
+//        //JAL 13
+//        enviar_intr ({8'b00100000,8'b00000100,16'd86});//2                                            
+//        // ADDI 4,0,86
+//        enviar_intr ({8'b00001000,8'b0,8'b0,8'd16});//3
+//        //J 16
+//        enviar_intr ({32'b0});//4
+//        //NOP
+//        enviar_intr ({32'b0});//5
+//        //NOP   
+//        enviar_intr ({32'b0});//6
+//        //NOP
+//        enviar_intr ({32'b0});//7
+//        //NOP
+//        enviar_intr ({32'b0});//8
+//        //NOP    
+//        enviar_intr ({32'b0});//9
+//        //NOP
+//        enviar_intr ({32'b0});//10
+//        //NOP
+//        enviar_intr ({32'b0});//11
+//        //NOP    
+//        enviar_intr ({32'b0});//12
+//        //NOP
+//         enviar_intr ({32'b0});//13
+//        //NOP
+//        enviar_intr ({8'b00100000,8'b00000101,16'd87});//14                                           
+//        // ADDI 5,0,87
+//        enviar_intr ({6'b0,5'd31,5'b0,5'd30,5'b0,6'b001001});//15
+//        //JALR 31,30     
+//        enviar_intr ({8'b01000000,24'b0});//16
+//        //HALT
 //        for (i = 0 ; i < 10 ; i = i + 1)
 //        begin
 //            enviar_byte("S");
