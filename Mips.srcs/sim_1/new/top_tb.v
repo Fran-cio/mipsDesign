@@ -161,49 +161,49 @@ module top_tb;
 ////        enviar_byte("C");
 ////        enviar_byte("F"); 
 ////------------------------------- TEST JUMP CONDICIONALES Y NO --------------------    
-//        enviar_byte("B"); 
-//        enviar_intr ({8'b00001000,8'b0,8'b0,8'd5});//0
-//        //J 5
-//        enviar_intr ({8'b00100000,8'b00000011,16'd85});//1                                            
-//       // ADDI 3,0,85
-//        enviar_intr ({32'b0});//2
-//        //NOP
-//        enviar_intr ({32'b0});//3
-//        //NOP    
-//        enviar_intr ({32'b0});//4
-//        //NOP
-//        enviar_intr ({8'b00001100,24'd8});//5
-//        //JAL 20
-//        enviar_intr ({8'b00100000,8'b00000100,16'd95});//6                                             
-//        // ADDI 4,0,95
-//        enviar_intr ({32'b0});//7
-//        //NOP
-//        enviar_intr ({11'b00100000000,5'd5,16'd14}); //8                                              
-////        // ADDI 5,0,14
-//        enviar_intr ({6'b000000,5'd5,15'b0,6'b001000});//9
-//        //JR $t(5)
-//        enviar_intr ({11'b00100000000,5'd2,16'd2}); //10                                             
-//        // ADDI 2,0,2
-//        enviar_intr ({32'b0});//11
-//        //NOP
-//        enviar_intr ({32'b0});//12
-//        //NOP
-//        enviar_intr ({32'b0});//13
-//        //NOP
-//        enviar_intr ({11'b00100000000,5'd6,16'd20}); //14                                             
-//        // ADDI 6,0,20
-//        enviar_intr ({6'b000000,5'd6,5'b0,5'd30,5'b0,6'b001001});//15
-//        //JALR $t(6),$t(30)
-//        enviar_intr ({11'b00100000000,5'd1,16'd1}); //16                                             
-//        // ADDI 1,0,1
-//        enviar_intr ({32'b0});//17
-//        //NOP
-//        enviar_intr ({32'b0});//18
-//        //NOP
-//        enviar_intr ({32'b0});//19
-//        //NOP
-//        enviar_intr ({11'b00100000000,5'd7,16'd15}); //20                                           
-////        // ADDI 7,0,15
+        enviar_byte("B"); 
+        enviar_intr ({8'b00001000,8'b0,8'b0,8'd5});//0
+        //J 5
+        enviar_intr ({8'b00100000,8'b00000011,16'd85});//1                                            
+       // ADDI 3,0,85
+        enviar_intr ({32'b0});//2
+        //NOP
+        enviar_intr ({32'b0});//3
+        //NOP    
+        enviar_intr ({32'b0});//4
+        //NOP
+        enviar_intr ({8'b00001100,24'd8});//5
+        //JAL 8
+        enviar_intr ({8'b00100000,8'b00000100,16'd95});//6                                             
+        // ADDI 4,0,95
+        enviar_intr ({32'b0});//7
+        //NOP
+        enviar_intr ({11'b00100000000,5'd5,16'd56}); //8                                              
+//        // ADDI 5,0,14
+        enviar_intr ({6'b000000,5'd5,15'b0,6'b001000});//9
+        //JR $t(5)
+        enviar_intr ({11'b00100000000,5'd2,16'd2}); //10                                             
+        // ADDI 2,0,2
+        enviar_intr ({32'b0});//11
+        //NOP
+        enviar_intr ({32'b0});//12
+        //NOP
+        enviar_intr ({32'b0});//13
+        //NOP
+        enviar_intr ({11'b00100000000,5'd6,16'd80}); //14                                             
+        // ADDI 6,0,20
+        enviar_intr ({6'b000000,5'd6,5'b0,5'd30,5'b0,6'b001001});//15
+        //JALR $t(6),$t(30)
+        enviar_intr ({11'b00100000000,5'd1,16'd1}); //16                                             
+        // ADDI 1,0,1
+        enviar_intr ({32'b0});//17
+        //NOP
+        enviar_intr ({32'b0});//18
+        //NOP
+        enviar_intr ({32'b0});//19
+        //NOP
+        enviar_intr ({11'b00100000000,5'd7,16'd15}); //20                                           
+//        // ADDI 7,0,15
 //        enviar_intr ({11'b00100000000,5'd8,16'd8}); //20  
 ////        // ADDI 8,0,8
 //        enviar_intr ({6'b001000,5'd8,5'd8,16'b1}); 
@@ -220,7 +220,7 @@ module top_tb;
 //        // ADDI 10,0,8
 //        enviar_intr ({11'b00100000000,5'd11,16'd8}); //20  
 //        // ADDI 11,0,8
-//        enviar_intr ({8'b01000000,24'b0});//21
+        enviar_intr ({8'b01000000,24'b0});//21
         //HALT
         ////------------------------------- TEST JUMP RETURN --------------------    
 //        enviar_byte("B"); 
@@ -289,21 +289,21 @@ module top_tb;
 //        enviar_intr ({8'b01000000,24'b0});//9
 //        //HALT
 
-        enviar_byte("B"); 
-        enviar_intr ({6'b001000,5'b0,5'b00011,16'd4});//0                                          
-        // ADDI 3,0,4
-        enviar_intr ({6'b001000,5'b0,5'b00100,16'd4});//1                                         
-        // ADDI 4,0,4
-        enviar_intr ({6'b000100,5'b00011,5'b00100,16'd0});//2 
-        // BEQ R3, R4             
-        enviar_intr ({6'b001000,5'b0,5'b00101,16'd86});//3  si salta pc + 1 debería venir acá y debería tener != 0 R5 y R6                                   
-        // ADDI 5,0,86
-        enviar_intr ({32'b0});//4 si salta pc + 2 debería venir acá y debería tener R5 = 0 y R6 != 0
-        //NOP
-        enviar_intr ({6'b001000,5'b0,5'b00110,16'd90});//5                                       
-        // ADDI 6,0,90           
-        enviar_intr ({8'b01000000,24'b0});//6
-        //HALT
+//        enviar_byte("B"); 
+//        enviar_intr ({6'b001000,5'b0,5'b00011,16'd4});//0                                          
+//        // ADDI 3,0,4
+//        enviar_intr ({6'b001000,5'b0,5'b00100,16'd4});//1                                         
+//        // ADDI 4,0,4
+//        enviar_intr ({6'b000100,5'b00011,5'b00100,16'd0});//2 
+//        // BEQ R3, R4             
+//        enviar_intr ({6'b001000,5'b0,5'b00101,16'd86});//3  si salta pc + 1 debería venir acá y debería tener != 0 R5 y R6                                   
+//        // ADDI 5,0,86
+//        enviar_intr ({32'b0});//4 si salta pc + 2 debería venir acá y debería tener R5 = 0 y R6 != 0
+//        //NOP
+//        enviar_intr ({6'b001000,5'b0,5'b00110,16'd90});//5                                       
+//        // ADDI 6,0,90           
+//        enviar_intr ({8'b01000000,24'b0});//6
+//        //HALT
 
         enviar_byte("G");
 

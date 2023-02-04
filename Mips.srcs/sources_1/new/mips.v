@@ -198,7 +198,7 @@ sumador #(
     .TAM_DATO(TAM_DATA)
 )
 sum_if(
-    .i_a(pc_suma_result), 
+    .i_a(de_if_a_id[31:0]), 
     .i_b(o_dato_direc_branch<<2), 
     .o_result(immediate_suma_result)
 );
