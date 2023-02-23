@@ -1,0 +1,17 @@
+ADDI	R3,R0,85	R3 = 85
+JAL	14		Salta a ADDI	R5,R0,87 PC = 56, R31 = 8
+ADDI	R4,R0,86	Retorna aca R4 = 86
+J	16		Salta a HALT PC = 64
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+ADDI	R5,R0,87	R5 = 87
+JALR	R30,R31		Salta a la direccion de retorno guardada en R31, PC = 8, R30 = 64
+HALT

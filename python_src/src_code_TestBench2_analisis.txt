@@ -1,0 +1,30 @@
+J	5		Salta a JAL 8 PC=20
+ADDI	R3,R0,85	X
+NOP			X
+NOP			X				
+NOP			X
+JAL 	8		Salta a ADDI	R5,R0,56 PC=32, R31 = 24
+ADDI	R4,R0,95	X
+NOP			X
+ADDI	R5,R0,56	R5 = 56 = 38H
+JR	R5		Salta a ADDI	R6,R0,80 PC=56
+ADDI	R2,R0,2		X
+NOP			X
+NOP			X
+NOP			X
+ADDI	R6,R0,80	R6 = 80
+JALR	R30,R6		Salta a ADDI	R7,R0,15 PC=80, R30 = 16*4 = 64
+ADDI	R1,R0,0		X
+NOP			X
+NOP			X
+NOP			X
+ADDI	R7,R0,15	R7 = 15
+ADDI	R8,R0,8		R8 = 8 al final del bucle 15
+ADDI	R8,R8,1		
+SW	R7,0(8)
+BNE	R8,R7,-3	Buclea las ultimas 2 instrucciones sumando la pos de mem y haciendo store hasta el 15
+BEQ	R8,R7,2		Si R8 == R7, salta hasta ADDI	R11,R0,8 PC = 112
+ADDI	R9,R0,8		
+ADDI	R10,R0,8
+ADDI	R11,R0,8
+HALT

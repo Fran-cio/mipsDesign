@@ -18,6 +18,7 @@
 #Do NOT ignore VHDL, Verilog, block diagrams or EDIF files.
 !*.srcs/**/*.v
 !*.srcs/**/*.xdc
+!python_src
 !*.pdf
 !.img/*
 !*.py
