@@ -123,7 +123,7 @@ module top#(
      );
      
      uart#(
-        .DVSR(417),
+             .DVSR(326),
         .DVSR_BIT(9)
        )uartSuod
       (.clk(clk_out64MHz), .reset(i_reset), .rd_uart(read_enable_de_suod_a_uart),
