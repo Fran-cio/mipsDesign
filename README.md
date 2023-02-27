@@ -1,6 +1,36 @@
-# TP3 - Mips
+# __TP3 - Mips__
 
-## Introducción
+## __How To:__
+1. Clonar el repositorio utilizando el comando `git clone git@github.com:JuanManuel-Cloud/FPGA-MIPS.git --recursive`. Esto además de clonar el repositorio con las fuentes del MIPS también inicializarán los submodulos que se utilizan dentro del proyecto.
+
+    __Submódulos__:
+    * [FPGA-UART repository](https://github.com/JuanManuel-Cloud/FPGA-UART/tree/tp3)
+    * [FPGA-ALU repository](https://github.com/JuanManuel-Cloud/FPGA-ALU/tree/tp3)
+2. Crear un nuevo proyecto en Vivado.
+
+    __<font color='orange'>WARNING:</font>__ ¡Aún no agregar las fuentes!
+3. Una vez creado el proyecto proceder a agregar la carpeta con las fuentes, idem si se desean los archivos de simulación.
+4. Agregar los constraints (los cuales se encuentran en la carpeta `FPGA-MIPS/Mips.srcs/constrs_1`) y el .xci que corresponde al IP del clock tree (se encuentra en la carpeta `FPGA-MIPS/Mips.srcs/ip/clk_wiz_0/clk_wiz_0.xci`).
+5. Correr el *"generate bitstream"* en vivado.
+6. Conectar la placa.
+7. Clickear en *"AutoConnect"*.
+8. Clickear en *"Program device"*, una vez programado deberían ver una __<font color='red'>luz roja</font>__ sobre la placa.
+9. En este punto tenemos la síntesis del MIPS cargada en la placa, por lo que procedemos a  [descargar RealTerm](https://realterm.sourceforge.io/index.html#downloads_Download) esta app nos va a permitir enviar datos via serial a la placa.
+10. En la pestaña de *"port"*, setear el baudrate en 9600 y elegir el puerto correspondiente.
+11. __OPCIONAL:__ En la pestaña *"send"* pueden enviar una *"P"* para ver si les devuelve 0 y de esta manera chequear que la conexión serial se estableció correctamente.
+12. Ahora hay que generar el binario, para lo cual nos vamos a `FPGA-MIPS/python_src` ahí mismo encontrarán un archivo de .asm llamado *src_code.asm* ahí deben colocar el assembly deseado, en dicha carpeta también tendrán archivos de prueba con sus respectivos análisis.
+13. En este paso vamos a generar el binario, para lo cual deben correr, `python3 -W ignore assembler.py` esto generará un archivo .hex llamado *output_code.hex*.
+
+    __<font color='orange'>DISCLAIMER:</font>__ es posible que deban instalar algunos módulos de python si no los tienen, seguir los logs de la terminal en tal caso.
+
+14. Ahora procedemos a cargar el binario, en la pestaña *"send"* de RealTerm enviamos una letra *'B'*.
+15. Ahora copiamos y pegamos el binario, o bien lo importamos en el apartado correspondiente en RealTerm.
+16. Cuando el binario se haya cargado correctamente, deberían ver una __<font color='green'>luz verde</font>__ sobre la placa.
+17. Ahora pueden seguir los comandos y la máquina de estados presente en el informe para realizar la ejecución que deseen, por ejemplo podrían enviar una *'G'* para correr todo el programa, en dicho caso verían una __<font color='blue'>luz azul</font>__ al finalizar la ejecución.
+
+__<font color='orange'>DISCLAIMER:</font>__ es posible que los colores de los leds varien dependiendo de la placa utilizada, o si se modifican los constraints.
+
+## __Introducción__
 
 El trabajo consiste en la implementación en FPGA de un procesador MIPS, desarrollado en el lenguaje de descripción de hardware Verilog.
 
@@ -45,7 +75,7 @@ Para interactuar con el procesador se deben tener en cuenta los siguientes reque
     ![Untitled](.images/Untitled_6.png)
     
 
-## Etapas
+## __Etapas__
 
 ### Instruccion Fetch
 
@@ -97,7 +127,7 @@ Esta etapa solamente escribe los datos en los registros en caso de hacerlo.
 
 A la salida de esta etapa está el enable de escritura del registro, el dato a escribir y la dirección de escritura que es determinada por una señal de control.
 
-## Instrucciones
+## __Instrucciones__
 
 Las instrucciones se dividen en 3 tipos:
 
@@ -230,7 +260,7 @@ Esta tabla de verdad es la que en base a esos campos, decide dentro de la etapa 
 
 Se ve la unidad de control en la 2da etapa del pipeline destacado con color verde. Las señales viajan y entran en las unidades determinando el comportamiento de el procesador.
 
-## Control de Riesgos
+## __Control de Riesgos__
 
 ### Riesgos estructurales
 
@@ -327,7 +357,7 @@ Esto en la *unidad de detección de riesgos* se modela, simplemente verificando 
 
 Se ven las entradas y salidas de la unidad de control
 
-## Formas de Operar
+## __Formas de Operar__
 
 Como se nombro en la introduccion, exiten 3 requisitos mas relacionados a la interaccion entre el procesador y el usuario. Para esto se diseño la **Super Unidad de Operacion y Debug** ($\text{SUOD}$*)*, el cual consiste en una gran maquina de estado que segun la entrada de usuario genera una accion.
 
