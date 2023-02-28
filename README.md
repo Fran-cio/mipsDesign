@@ -1,11 +1,11 @@
 # __TP3 - Mips__
 
 ## __How To:__
-1. Clonar el repositorio utilizando el comando `git clone git@github.com:JuanManuel-Cloud/FPGA-MIPS.git --recursive`. Esto además de clonar el repositorio con las fuentes del MIPS también inicializarán los submodulos que se utilizan dentro del proyecto.
+1. Clonar el repositorio utilizando el comando `git clone git@github.com:Fran-cio/MIPS_Con_Unidad_De_Operacion.git --recursive`. Esto además de clonar el repositorio con las fuentes del MIPS también inicializarán los submodulos que se utilizan dentro del proyecto.
 
     __Submódulos__:
-    * [FPGA-UART repository](https://github.com/JuanManuel-Cloud/FPGA-UART/tree/tp3)
-    * [FPGA-ALU repository](https://github.com/JuanManuel-Cloud/FPGA-ALU/tree/tp3)
+    * [FPGA-UART repository](https://github.com/Fran-cio/Modulo-UART)
+    * [FPGA-ALU repository](https://github.com/Fran-cio/Modulo-ALU)
 2. Crear un nuevo proyecto en Vivado.
 
     __<font color='orange'>WARNING:</font>__ ¡Aún no agregar las fuentes!

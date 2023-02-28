@@ -1,4 +1,4 @@
 [submodule "Mips.srcs/sources_1/FPGA-UART"]
 	path = Mips.srcs/sources_1/FPGA-UART
-	url = git@github.com:JuanManuel-Cloud/FPGA-UART.git
-	branch = tp3
+	url = git@github.com:Fran-cio/Modulo-UART.git	
+	branch = master
