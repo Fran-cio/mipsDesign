@@ -20,7 +20,8 @@
 !*.srcs/**/*.xdc
 !python_src
 !*.pdf
-!.img/*
+!*.md
+!.images/*
 !*.py
 !*.hex
 !*.asm
