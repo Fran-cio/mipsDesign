@@ -42,7 +42,7 @@
     <a href="https://github.com/Fran-cio/mipsDesign"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/Fran-cio/mipsDesign/mipsDesign">View Demo</a>
+    <a href="https://github.com/Fran-cio/mipsDesign">View Demo</a>
     ·
     <a href="https://github.com/Fran-cio/mipsDesign/issues">Report Bug</a>
     ·
