@@ -25,8 +25,9 @@
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
-
-
+<p align="center">
+    <a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&center=true&vCenter=true&width=560&height=27&lines=Hi+stranger;Supongo+que+viniste+en+busca+de+conocimiento;Usa+este+material+como+mera+inspiracion;Los+verdaderos+campeones+nunca+hacen+trampa;PLS" alt="Typing SVG" /></a>
+</p>
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
